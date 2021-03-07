@@ -89,9 +89,36 @@
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Animation.cs" />
+    <Compile Include="Game\Controls\Button.cs" />
+    <Compile Include="Game\Crops\Corn.cs" />
+    <Compile Include="Game\Crops\Crop.cs" />
+    <Compile Include="Game\Crops\Lettuce.cs" />
+    <Compile Include="Game\Crops\Wheat.cs" />
+    <Compile Include="Game\Entity.cs" />
+    <Compile Include="Game\interfaces\InventoryItem.cs" />
+    <Compile Include="Game\InventorySlot.cs" />
+    <Compile Include="Game\Items\CropItem.cs" />
+    <Compile Include="Game\Items\LiveStockItem.cs" />
+    <Compile Include="Game\Items\MeatItem.cs" />
+    <Compile Include="Game\Items\SeedItem.cs" />
+    <Compile Include="Game\Items\TileItem.cs" />
+    <Compile Include="Game\Livestocks\Chicken.cs" />
+    <Compile Include="Game\Livestocks\Cow.cs" />
+    <Compile Include="Game\Livestocks\LiveStock.cs" />
+    <Compile Include="Game\Map\FarmTile.cs" />
+    <Compile Include="Game\ShopSlot.cs" />
+    <Compile Include="Game\Weather.cs" />
+    <Compile Include="Global.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="States\GameState.cs" />
+    <Compile Include="States\InventoryState.cs" />
+    <Compile Include="States\MenuState.cs" />
+    <Compile Include="States\SettingState.cs" />
+    <Compile Include="States\ShopState.cs" />
+    <Compile Include="States\State.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
