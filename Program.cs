@@ -7,11 +7,13 @@ namespace ThreadingInCsharp
     /// </summary>
     public static class Program
     {
-        [STAThread]
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
         static void Main()
         {
-            using (var game = new Global())
-                game.Run();
+            var factory = new MonoGame.Framework.GameFrameworkViewSource<Game1>();
+            Windows.ApplicationModel.Core.CoreApplication.Run(factory);
         }
     }
 }
