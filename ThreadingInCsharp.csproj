@@ -87,8 +87,6 @@
     <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
   <ItemGroup>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Animation.cs" />
     <Compile Include="Game\Controls\Button.cs" />
     <Compile Include="Game\Crops\Corn.cs" />
@@ -126,6 +124,57 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Button.png" />
+    <Content Include="Content\chicken.png" />
+    <Content Include="Content\CloseButton.png" />
+    <Content Include="Content\corn.png" />
+    <Content Include="Content\cornCrop.png" />
+    <Content Include="Content\cow.png" />
+    <Content Include="Content\dirt.png" />
+    <Content Include="Content\Grass.png" />
+    <Content Include="Content\itemCount.png" />
+    <Content Include="Content\ItemSlot.png" />
+    <Content Include="Content\lettuce.png" />
+    <Content Include="Content\lettuceCrop.png" />
+    <Content Include="Content\Map.png" />
+    <Content Include="Content\MenuBackground.png" />
+    <Content Include="Content\OptionsMenu.png" />
+    <Content Include="Content\rain.png" />
+    <Content Include="Content\seeds.png" />
+    <Content Include="Content\seeds_corn.png" />
+    <Content Include="Content\seeds_lettuce.png" />
+    <Content Include="Content\seeds_wheat.png" />
+    <Content Include="Content\Sound\rain.wav" />
+    <Content Include="Content\Sound\seed.png" />
+    <Content Include="Content\Sound\selectionClick.wav" />
+    <Content Include="Content\Sound\soundtrack.mp3" />
+    <Content Include="Content\Sprites\animals.jpg" />
+    <Content Include="Content\Sprites\Beef.png" />
+    <Content Include="Content\Sprites\Box.png" />
+    <Content Include="Content\Sprites\chicken.png" />
+    <Content Include="Content\Sprites\chicken_leg.png" />
+    <Content Include="Content\Sprites\chicken_meat.jpg" />
+    <Content Include="Content\Sprites\chicken_meat.png" />
+    <Content Include="Content\Sprites\chicken_walk_down.png" />
+    <Content Include="Content\Sprites\chicken_walk_left.png" />
+    <Content Include="Content\Sprites\chicken_walk_right.png" />
+    <Content Include="Content\Sprites\chicken_walk_up.png" />
+    <Content Include="Content\Sprites\Corn.png" />
+    <Content Include="Content\Sprites\cow_walk_down.png" />
+    <Content Include="Content\Sprites\cow_walk_left.png" />
+    <Content Include="Content\Sprites\cow_walk_right.png" />
+    <Content Include="Content\Sprites\cow_walk_up.png" />
+    <Content Include="Content\Sprites\deadChicken.png" />
+    <Content Include="Content\Sprites\dirt2.png" />
+    <Content Include="Content\Sprites\land.png" />
+    <Content Include="Content\Sprites\Lettuce-icon.png" />
+    <Content Include="Content\Sprites\Lettuce.png" />
+    <Content Include="Content\Sprites\lettuceseed.png" />
+    <Content Include="Content\Sprites\seed.png" />
+    <Content Include="Content\Sprites\wheat.png" />
+    <Content Include="Content\storeBackground.png" />
+    <Content Include="Content\wheat.png" />
+    <Content Include="Content\wheatCrop.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -147,6 +196,9 @@
     </PackageReference>
     <PackageReference Include="MonoGame.Framework.WindowsUniversal" Version="3.8.0.1641" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\defaultFont.spritefont" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
