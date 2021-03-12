@@ -1,6 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using System;
+using ThreadingInCsharp.Game.Crops;
+using ThreadingInCsharp.Game.Items;
+using ThreadingInCsharp.States;
 
 namespace ThreadingInCsharp.Game.Map
 {
@@ -137,7 +142,7 @@ namespace ThreadingInCsharp.Game.Map
         {
             if (plantedSeed.CurrentFrame == plantedSeed.FrameCount - 1)
             {
-                if (game.addCropToInventory(plantedSeed))
+                if (game.AddCropToInventory(plantedSeed))
                 {
                     this.plantedSeed = null;
                 }

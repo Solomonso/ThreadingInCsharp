@@ -2,10 +2,11 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using ThreadingInCsharp.Controls;
+using ThreadingInCsharp.Game.Controls;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Audio;
+using ThreadingInCsharp.Game;
 
 namespace ThreadingInCsharp.States
 {

@@ -15,7 +15,7 @@ using ThreadingInCsharp.Game.Map;
 
 namespace ThreadingInCsharp.States
 {
-    public class GameState
+    public class GameState : State
     {
         Texture2D rainTexture;
         Texture2D buttonTexture;
@@ -292,7 +292,7 @@ namespace ThreadingInCsharp.States
         }
 
         //add animals to game when you buy them
-        public void AddAnimal(LivestockItem animal)
+        public void AddAnimal(LiveStockItem animal)
         {
             int i = 1;
             if (animal.GetName() == "chicken")
@@ -526,6 +526,11 @@ namespace ThreadingInCsharp.States
                 currRain = weather.randomRain();
                 this.timeTillNextRain = new TimeSpan(0, 1, 0);
             }
+        }
+
+        public override void PostUpdate(GameTime gameTime)
+        {
+            //Implement an update if need arises later
         }
     }
 }

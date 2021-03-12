@@ -3,14 +3,14 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Microsoft.Xna.Framework;
-using System.Numerics;
 using ThreadingInCsharp.Game.Controls;
 using ThreadingInCsharp.Game.Items;
 using ThreadingInCsharp.States;
+using ThreadingInCsharp.Game.interfaces;
 
 namespace ThreadingInCsharp.Game
 {
-    public class InventorySlot
+    public class InventorySlot : Entity
     {
         IInventoryItem item;
         SeedItem seeditem;

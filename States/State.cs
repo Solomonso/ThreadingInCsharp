@@ -41,9 +41,11 @@ namespace ThreadingInCsharp.States
         {
             foreach (Entity component in components)
             {
-                components.Update(gameTime);
+                component.Update(gameTime);
             }
             
         }
+
+       
     }
 }

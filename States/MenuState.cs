@@ -1,6 +1,13 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using ThreadingInCsharp.Game;
+using ThreadingInCsharp.Game.Controls;
 
 namespace ThreadingInCsharp.States
 {
@@ -66,11 +73,6 @@ namespace ThreadingInCsharp.States
             spriteBatch.End();
         }
 
-        public override void PostUpdate(GameTime gameTime)
-        {
-            //Implement an update if need arises later
-        }
-
         private void QuitgameButton_Click(object sender, EventArgs e)
         {
             this.buttonSound.Play();
@@ -88,5 +90,11 @@ namespace ThreadingInCsharp.States
             this.buttonSound.Play();
             _global.ChangeState(_global.Game);
         }
+
+        public override void PostUpdate(GameTime gameTime)
+        {
+           // throw new NotImplementedException();
+        }
     }
 }
+

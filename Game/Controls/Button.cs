@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ThreadingInCsharp.Game.Controls
 {
-    public class Button
+    public class Button : Entity
     {
 
         private MouseState _currentMouse;
