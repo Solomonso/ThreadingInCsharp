@@ -1,28 +1,27 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ThreadingInCsharp.Game.interfaces
 {
-    public interface IInventoryItem
+ public interface IInventoryItem
     {
-        int GetPrice();
+        public abstract int GetPrice();
 
-        int GetCount();
+        public abstract int GetCount();
 
-        Texture2D GetTexture();
+        public abstract Texture2D GetTexture();
 
-        void SetCount();
+        public abstract void SetCount();
 
-        void SetPrice(int price);
+        public abstract void SetPrice(int price);
 
-        void Buy();
+        public abstract void Buy();
 
-        string GetName();
+        public abstract string GetName();
 
-        void Sell();
+        public abstract void Sell();
 
-        int GetSellingPrice();
+        public abstract int GetSellingPrice();
     }
 }
