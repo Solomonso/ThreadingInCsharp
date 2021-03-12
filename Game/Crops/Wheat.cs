@@ -4,7 +4,11 @@ using System.Text;
 
 namespace ThreadingInCsharp.Game.Crops
 {
-    class Wheat
-    {
-    }
+	class Wheat : Crop
+	{
+		public Wheat(ContentManager content, Vector2 position, FarmTile farmTile, GameState game) : base(content.Load<Texture2D>("wheatCrop"), position, "wheat", 5, 50, 70, farmTile, game, 10, 30, 50, 90)
+		{
+
+		}
+	}
 }
