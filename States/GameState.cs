@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using ThreadingInCsharp.Game;
 using ThreadingInCsharp.Game.Controls;
 using ThreadingInCsharp.Game.Crops;
@@ -339,8 +341,13 @@ namespace ThreadingInCsharp.States
 
         public override void Update(GameTime gameTime)
         {
-            updateWeather(gameTime);
-            makeItRain(gameTime);
+            //Using TPL
+
+            //Using TPL randomize weather conditions
+            Task weatherUpdate = new Task(() => updateWeather(gameTime));
+            Task generateRain = new Task(() => makeItRain(gameTime));
+            weatherUpdate.Start();
+            generateRain.Start();
 
             if (currRain)
             {
@@ -511,9 +518,12 @@ namespace ThreadingInCsharp.States
             if (this.timeTillNextWeatherUpdate < TimeSpan.Zero)
             {
                 currTemp = weather.randomTemp();
+                Thread.Sleep(3000); //Suspend the currTemp(current thread) for 3 seconds
                 currHum = weather.randomHumidity();
+                Thread.Sleep(3000); //Suspend the currHum(current thread) for 3 seconds
                 currSun = weather.randomSun();
                 this.timeTillNextWeatherUpdate = new TimeSpan(0, 0, 10);
+             
             }
         }
 
