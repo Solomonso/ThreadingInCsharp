@@ -343,13 +343,9 @@ namespace ThreadingInCsharp.States
 
         public override void Update(GameTime gameTime)
         {
-            //Using TPL
-
             //Using TPL randomize weather conditions
-            Task weatherUpdate = new Task(() => updateWeather(gameTime));
-            Task generateRain = new Task(() => makeItRain(gameTime));
-            weatherUpdate.Start();
-            generateRain.Start();
+            Task.Factory.StartNew(() => updateWeather(gameTime));
+            Task.Factory.StartNew(() => makeItRain(gameTime));
 
             if (currRain)
             {
