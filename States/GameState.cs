@@ -299,22 +299,53 @@ namespace ThreadingInCsharp.States
             int i = 1;
             if (animal.GetName() == "chicken")
             {
-                Chicken chick = new Chicken(walkingChicken, new Vector2(500, 220));
-                components.Add(chick);
-                chick.Click += Livestock_Click;
-                i++;
-                chickenCount++;
-            }
+                //Start new task immediately and grow chicken
+                Task.Factory.StartNew(() =>
+                {
+                    Chicken chick = new Chicken(walkingChicken, new Vector2(500, 220));
+                    components.Add(chick);
+                    chick.Click += Livestock_Click;
+                    i++;
+                    chickenCount++;
+                });
 
-            if (animal.GetName() == "cow")
+            }
+            else if (animal.GetName() == "cow")
             {
+                //Start new task immediately and grow cows
+                Task.Factory.StartNew(() =>
+                {
+                    Cow cow = new Cow(walkingCow, new Vector2(420, 200));
+                    components.Add(cow);
+                    cow.Click += Livestock_Click;
+                    i++;
+                    cowCount += 1;
+                });
 
-                Cow cow = new Cow(walkingCow, new Vector2(420, 200));
-                components.Add(cow);
-                cow.Click += Livestock_Click;
-                i++;
-                cowCount += 1;
             }
+
+            //Task.Factory.StartNew(() =>
+            //{
+            //    if (animal.GetName() == "chicken")
+            //    {
+            //        Chicken chick = new Chicken(walkingChicken, new Vector2(500, 220));
+            //        components.Add(chick);
+            //        chick.Click += Livestock_Click;
+            //        i++;
+            //        chickenCount++;
+            //    }
+
+            //    if (animal.GetName() == "cow")
+            //    {
+            //        Cow cow = new Cow(walkingCow, new Vector2(420, 200));
+            //        components.Add(cow);
+            //        cow.Click += Livestock_Click;
+            //        i++;
+            //        cowCount += 1;
+            //    }
+
+            //});
+
         }
 
         void MouseMethod()
