@@ -62,12 +62,20 @@ namespace ThreadingInCsharp
             }
             currentState.Update(gameTime);
             currentState.PostUpdate(gameTime);
-            base.Update(gameTime);
+           base.Update(gameTime);
+        }
+
+        public void _Resize()
+        {
+            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            graphics.ApplyChanges();
         }
 
         protected override void Update(GameTime gameTime)
         {
             _ChangeState(gameTime);
+            _Resize();
         }
 
         protected override void Draw(GameTime gameTime)

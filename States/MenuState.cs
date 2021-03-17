@@ -33,7 +33,7 @@ namespace ThreadingInCsharp.States
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(song);
 
-            var newGameButton = new Button(buttonTexture, buttonFont, new Vector2(300, 200), 1)
+            var newGameButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width/2, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height/2), 1)
             {
                 Text = "Play Game",
             };
@@ -65,8 +65,7 @@ namespace ThreadingInCsharp.States
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(background, new Rectangle(0, 0, 800, 500), Color.White);
-
+            spriteBatch.Draw(background, new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
             foreach (var component in components)
                 component.Draw(gameTime, spriteBatch);
 

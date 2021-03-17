@@ -30,6 +30,7 @@ namespace ThreadingInCsharp.States
         SpriteFont font;
         Button closeButton;
 
+
         public InventoryState(Global game, GraphicsDevice graphicsDevice, ContentManager contentManager)
             : base(game, graphicsDevice, contentManager)
         {
@@ -45,7 +46,6 @@ namespace ThreadingInCsharp.States
             this.wheatSeedSprite = game.Content.Load<Texture2D>("seeds_wheat");
             this.cowSprite = game.Content.Load<Texture2D>("Sprites/Beef");
             this.chickenSprite = game.Content.Load<Texture2D>("Sprites/chicken_leg");
-
             CreateInventory();
 
             for (int i = 0; i < (int)Math.Ceiling(((float)Inventory.Count / 5)); i++)
@@ -70,7 +70,7 @@ namespace ThreadingInCsharp.States
             components.Add(closeButton);
 
         }
-
+              
         private void CloseButton_Click(object sender, EventArgs e)
         {
             _global.ChangeState(_global.Game);
