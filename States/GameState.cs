@@ -54,6 +54,10 @@ namespace ThreadingInCsharp.States
         public int chickenCount;
         public int cowCount;
 
+        private Thread chickenThread;
+        private Thread[] liveStockThreadList;
+        private SemaphoreSlim liveStockSemaphore;
+           
         TimeSpan timeTillNextWeatherUpdate;
         TimeSpan timeTillNextRain;
 
@@ -65,7 +69,8 @@ namespace ThreadingInCsharp.States
 
             this.chickenSprites = new List<Texture2D>();
             this.cowSprites = new List<Texture2D>();
-
+            this.liveStockThreadList = new Thread[1000];
+            this.liveStockSemaphore = new SemaphoreSlim(3);
             this.mouseState = mouseState;
             this.inventory = inventory;
             this.shop = shop;
@@ -293,21 +298,32 @@ namespace ThreadingInCsharp.States
         //add animals to game when you buy them
         public void AddAnimal(LiveStockItem animal)
         {
-   
             int i = 1;
             if (animal.GetName() == "chicken")
             {
-                Chicken chick = new Chicken(walkingChicken, new Vector2(500, 220));
-               
-              
-             
-                components.Add(chick);
-                chick.Click += Livestock_Click;
-                i++;
                 chickenCount++;
             }
-          
 
+            for (int j = 0; j < chickenCount; j++)
+            {
+                this.liveStockThreadList[j] =  new Thread(() =>
+                {
+                    Chicken chick = new Chicken(walkingChicken, new Vector2(500, 220));
+                    components.Add(chick);
+                    this.liveStockSemaphore.Wait();
+
+                    chick.Click += Livestock_Click;
+                    i++;
+                });
+                
+                this.liveStockSemaphore.Release();
+               
+                this.liveStockThreadList[j].Start();
+                
+
+
+            }
+           
             if (animal.GetName() == "cow")
             {
 
@@ -488,6 +504,8 @@ namespace ThreadingInCsharp.States
         //event clicker for harvesting animals
         private void Livestock_Click(object sender, EventArgs e)
         {
+           
+
             if (((LiveStock)sender).GetName() == "cow")
             {
                 this.cowCount -= 1;
@@ -502,12 +520,15 @@ namespace ThreadingInCsharp.States
             }
             else if (((LiveStock)sender).GetName() == "chicken")
             {
+                this.liveStockThreadList[0].Join();
                 this.chickenCount -= 1;
+
                 for (int i = 0; i < inventory.Inventory.Count; i++)
                 {
                     if ("chicken" == inventory.Inventory[i].GetName())
                     {
                         inventory.Inventory[i].SetCount();
+                       
                     }
                 }
                 ((Entity)sender).Texture = deadChicken;

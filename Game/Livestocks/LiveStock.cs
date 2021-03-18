@@ -63,6 +63,7 @@ namespace ThreadingInCsharp.Game.Livestocks
 
         public override void Update(GameTime gameTime)
         {
+         
             timeTillNextStage = timeTillNextStage.Subtract(gameTime.ElapsedGameTime);
             //if (game.currHum >= minHum && game.currHum <= maxHum && game.currTemp >= minTemp && game.currTemp <= maxTemp)
             //{
