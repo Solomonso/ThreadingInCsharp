@@ -35,7 +35,7 @@ namespace ThreadingInCsharp.States
         {
             Inventory = new List<IInventoryItem>();
             seeds = new List<SeedItem>();
-            this.Coins = 1000;
+            this.Coins = 80000000;
             font = _content.Load<SpriteFont>("defaultFont");
             this.lettuceSprite = game.Content.Load<Texture2D>("Sprites/Lettuce-icon");
             this.lettuceSeedSprite = game.Content.Load<Texture2D>("seeds_lettuce");
@@ -88,7 +88,7 @@ namespace ThreadingInCsharp.States
             spriteBatch.End();
         }
 
-        void CreateInventory()
+        public void CreateInventory()
         {
             CropItem wheatItem = new CropItem(wheatSprite, new Vector2(-100, -100), 600, 0, "wheat", 600);
             SeedItem wheatSeed = new SeedItem(wheatSeedSprite, new Vector2(-100, -100), 100, 0, "wheat");

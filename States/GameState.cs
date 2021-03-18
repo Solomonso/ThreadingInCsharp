@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading;
 using ThreadingInCsharp.Game;
 using ThreadingInCsharp.Game.Controls;
 using ThreadingInCsharp.Game.Crops;
@@ -85,7 +85,7 @@ namespace ThreadingInCsharp.States
             littleCow = content.Load<Texture2D>("cow");
             walkingCow = content.Load<Texture2D>("Sprites/cow_walk_right");
             littleChicken = content.Load<Texture2D>("chicken");
-            walkingChicken = content.Load<Texture2D>("Sprites/chicken_walk_left");
+            walkingChicken = content.Load<Texture2D>("chickGrow2");
             deadChicken = content.Load<Texture2D>("Sprites/deadChicken");
 
             this.buttonSfx = content.Load<SoundEffect>("Sound/selectionClick");
@@ -103,7 +103,7 @@ namespace ThreadingInCsharp.States
             this.rainSound.IsLooped = true;
             if (currRain == true)
             {
-                rainSound.Play();
+               // rainSound.Play();
             }
             else
             {
@@ -212,7 +212,6 @@ namespace ThreadingInCsharp.States
         {
             Texture2D grass = _content.Load<Texture2D>("Grass");
 
-
             spriteBatch.Begin();
 
             spriteBatch.Draw(grass, new Rectangle(0, 0, 800, 500), Color.White);
@@ -294,15 +293,20 @@ namespace ThreadingInCsharp.States
         //add animals to game when you buy them
         public void AddAnimal(LiveStockItem animal)
         {
+   
             int i = 1;
             if (animal.GetName() == "chicken")
             {
                 Chicken chick = new Chicken(walkingChicken, new Vector2(500, 220));
+               
+              
+             
                 components.Add(chick);
                 chick.Click += Livestock_Click;
                 i++;
                 chickenCount++;
             }
+          
 
             if (animal.GetName() == "cow")
             {
@@ -312,6 +316,20 @@ namespace ThreadingInCsharp.States
                 cow.Click += Livestock_Click;
                 i++;
                 cowCount += 1;
+            }
+        }
+
+        //event clicker for crops
+        //important for adding crops to farmtile
+        private void farmTile_Click(object sender, EventArgs e)
+        {
+            if (selectedSeed != null && ((FarmTile)sender).plantedSeed == null)
+            {
+                ((FarmTile)sender).addSeed(selectedSeed);
+            }
+            else if (((FarmTile)sender).plantedSeed != null)
+            {
+                ((FarmTile)sender).harvestCrop();
             }
         }
 
@@ -363,84 +381,90 @@ namespace ThreadingInCsharp.States
             MouseMethod();
             PrepareSeed();
 
-            //animal's movement
-            for (int i = 0; i < components.Count; i++)
-            {
-                if (components[i].Texture == walkingChicken || components[i].Texture == walkingCow)
-                {
-                    int minChangTime = 10;
-                    int maxChangeTime = 500;
-                    int directionTimer;
+            ////animal's movement
+            //for (int i = 0; i < components.Count; i++)
+            //{
+            //    if (components[i].Texture == walkingChicken || components[i].Texture == walkingCow)
+            //    {
+            //        int minChangTime = 10;
+            //        int maxChangeTime = 500;
+            //        int directionTimer;
 
-                    directionTimer = random.Next(minChangTime, maxChangeTime);
-                    int nextIndex = random.Next(0, 5);
-                    int nextSpeed = random.Next(0, 6);
+            //        directionTimer = random.Next(minChangTime, maxChangeTime);
+            //        int nextIndex = random.Next(0, 5);
+            //        int nextSpeed = random.Next(0, 6);
 
-                    directionTimer -= gameTime.ElapsedGameTime.Milliseconds;
-                    int maxX = 540;
-                    int minX = 262;
+            //        directionTimer -= gameTime.ElapsedGameTime.Milliseconds;
+            //        int maxX = 540;
+            //        int minX = 262;
 
-                    int maxY = 265;
-                    int minY = 65;
+            //        int maxY = 265;
+            //        int minY = 65;
 
-                    Vector2 Pos = components[i].Position;
+            //        Vector2 Pos = components[i].Position;
 
-                    if (directionTimer <= 0)
-                    {
-                        switch (nextIndex)
-                        {
-                            case 1:
-                                Pos.X += nextSpeed;
-                                break;
-                            case 2:
-                                Pos.X -= nextSpeed;
-                                break;
-                            case 3:
-                                Pos.X += nextSpeed;
-                                break;
-                            case 4:
-                                Pos.X -= nextSpeed;
-                                break;
-                        }
-                        switch (nextIndex)
-                        {
-                            case 1:
-                                Pos.Y += nextSpeed;
-                                break;
-                            case 2:
-                                Pos.Y -= nextSpeed;
-                                break;
-                            case 3:
-                                Pos.Y -= nextSpeed;
-                                break;
-                            case 4:
-                                Pos.Y += nextSpeed;
-                                break;
-                        }
-                        components[i].Position = Pos;
-                    }
+            //        if (directionTimer <= 0)
+            //        {
+            //            switch (nextIndex)
+            //            {
+            //                case 1:
+            //                    Pos.X += nextSpeed;
+            //                    break;
+            //                case 2:
+            //                    Pos.X -= nextSpeed;
+            //                    break;
+            //                case 3:
+            //                    Pos.X += nextSpeed;
+            //                    break;
+            //                case 4:
+            //                    Pos.X -= nextSpeed;
+            //                    break;
+            //            }
+            //            switch (nextIndex)
+            //            {
+            //                case 1:
+            //                    Pos.Y += nextSpeed;
+            //                    break;
+            //                case 2:
+            //                    Pos.Y -= nextSpeed;
+            //                    break;
+            //                case 3:
+            //                    Pos.Y -= nextSpeed;
+            //                    break;
+            //                case 4:
+            //                    Pos.Y += nextSpeed;
+            //                    break;
+            //            }
+            //            components[i].Position = Pos;
+            //        }
 
-                    // Check for bounds
-                    if (Pos.X > maxX)
-                    {
-                        Pos.X = -2;
-                    }
-                    else if (Pos.X < minX)
-                    {
-                        Pos.X = +2;
-                    }
+            //        // Check for bounds
+            //        if (Pos.X > maxX)
+            //        {
+            //            Pos.X = -2;
+            //        }
+            //        else if (Pos.X < minX)
+            //        {
+            //            Pos.X = +2;
+            //        }
 
-                    if (Pos.Y > maxY)
-                    {
-                        Pos.Y = -2;
-                    }
-                    else if (Pos.Y < minY)
-                    {
-                        Pos.Y = +2;
-                    }
-                }
-            }
-            base.Update(gameTime);
+            //        if (Pos.Y > maxY)
+            //        {
+            //            Pos.Y = -2;
+            //        }
+            //        else if (Pos.Y < minY)
+            //        {
+            //            Pos.Y = +2;
+            //        }
+            //    }
+            //}
+            //StartThread(gameTime);
+        }
+
+        private void StartThread(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            Thread t1 = new Thread(() => base.Update(gameTime));
+            t1.Start();
         }
 
         private void shopButton_Click(object sender, EventArgs e)
@@ -459,19 +483,6 @@ namespace ThreadingInCsharp.States
         {
             this.buttonSound.Play();
             _global.ChangeState(_global.menu);
-        }
-
-        //event clicker for crops
-        private void farmTile_Click(object sender, EventArgs e)
-        {
-            if (selectedSeed != null && ((FarmTile)sender).plantedSeed == null)
-            {
-                ((FarmTile)sender).addSeed(selectedSeed);
-            }
-            else if (((FarmTile)sender).plantedSeed != null)
-            {
-                ((FarmTile)sender).harvestCrop();
-            }
         }
 
         //event clicker for harvesting animals
@@ -532,5 +543,6 @@ namespace ThreadingInCsharp.States
         {
             //Implement an update if need arises later
         }
+
     }
 }

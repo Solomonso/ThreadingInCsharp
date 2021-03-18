@@ -125,6 +125,8 @@
   <ItemGroup>
     <Content Include="Content\Button.png" />
     <Content Include="Content\chicken.png" />
+    <Content Include="Content\chickGrow.png" />
+    <Content Include="Content\chickGrow2.png" />
     <Content Include="Content\CloseButton.png" />
     <Content Include="Content\corn.png" />
     <Content Include="Content\cornCrop.png" />
