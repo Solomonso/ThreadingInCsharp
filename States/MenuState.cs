@@ -30,24 +30,24 @@ namespace ThreadingInCsharp.States
             this.buttonSfx = content.Load<SoundEffect>("Sound/selectionClick");
             this.buttonSound = buttonSfx.CreateInstance();
 
-            MediaPlayer.IsRepeating = true;
-            MediaPlayer.Play(song);
+            //MediaPlayer.IsRepeating = true;
+            //MediaPlayer.Play(song);
 
-            var newGameButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width/2, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height/2), 1)
+            var newGameButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 1 / 6, 950), 1)
             {
                 Text = "Play Game",
             };
 
             newGameButton.Click += NewGameButton_Click;
 
-            var settingsButton = new Button(buttonTexture, buttonFont, new Vector2(300, 250), 1)
+            var settingsButton = new Button(buttonTexture, buttonFont, new Vector2(900, 950), 1)
             {
                 Text = "Settings",
             };
 
             settingsButton.Click += SettingsButton_Click;
 
-            var quitGameButton = new Button(buttonTexture, buttonFont, new Vector2(300, 300), 1)
+            var quitGameButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 4/5, 950), 1)
             {
                 Text = "Quit Game",
             };

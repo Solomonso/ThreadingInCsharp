@@ -2,14 +2,13 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using ThreadingInCsharp.States;
 
 namespace ThreadingInCsharp
 {
     public class Global : Microsoft.Xna.Framework.Game
     {
+        public Vector2 resize = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         public InventoryState inventory;
@@ -30,6 +29,7 @@ namespace ThreadingInCsharp
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
         }
 
         protected override void Initialize()
