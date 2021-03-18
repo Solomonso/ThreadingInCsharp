@@ -297,9 +297,7 @@ namespace ThreadingInCsharp.States
         public void AddAnimal(LiveStockItem animal)
         {
             int i = 1;
-            Task.Factory.StartNew(() =>
-            {
-                if (animal.GetName() == "chicken")
+               if (animal.GetName() == "chicken")
                 {
                     Chicken chick = new Chicken(walkingChicken, new Vector2(500, 220));
                     components.Add(chick);
@@ -316,7 +314,6 @@ namespace ThreadingInCsharp.States
                     i++;
                     cowCount += 1;
                 }
-            });
         }
 
         void MouseMethod()
