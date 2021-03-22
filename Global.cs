@@ -21,7 +21,6 @@ namespace ThreadingInCsharp
         MouseState mouseState;
         private State currentState;
         private State nextState;
-
         public void ChangeState(State state)
         {
             nextState = state;

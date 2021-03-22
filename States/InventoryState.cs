@@ -8,6 +8,7 @@ using ThreadingInCsharp.Game;
 using ThreadingInCsharp.Game.Controls;
 using ThreadingInCsharp.Game.interfaces;
 using ThreadingInCsharp.Game.Items;
+using ThreadingInCsharp.Game.Livestocks;
 
 namespace ThreadingInCsharp.States
 {
@@ -16,6 +17,7 @@ namespace ThreadingInCsharp.States
 
         public List<IInventoryItem> Inventory;
         public List<SeedItem> seeds;
+        public List<LiveStock> chicken;
         public SeedItem selected = null;
         public int Coins;
 
@@ -35,6 +37,7 @@ namespace ThreadingInCsharp.States
         {
             Inventory = new List<IInventoryItem>();
             seeds = new List<SeedItem>();
+            chicken = new List<LiveStock>();
             this.Coins = 80000000;
             font = _content.Load<SpriteFont>("defaultFont");
             this.lettuceSprite = game.Content.Load<Texture2D>("Sprites/Lettuce-icon");
@@ -45,6 +48,8 @@ namespace ThreadingInCsharp.States
             this.wheatSeedSprite = game.Content.Load<Texture2D>("seeds_wheat");
             this.cowSprite = game.Content.Load<Texture2D>("Sprites/Beef");
             this.chickenSprite = game.Content.Load<Texture2D>("Sprites/chicken_leg");
+
+
 
             CreateInventory();
 

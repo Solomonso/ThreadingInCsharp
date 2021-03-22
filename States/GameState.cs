@@ -54,7 +54,6 @@ namespace ThreadingInCsharp.States
         public int chickenCount;
         public int cowCount;
 
-        private Thread chickenThread;
         private Thread[] liveStockThreadList;
         private SemaphoreSlim liveStockSemaphore;
            
@@ -69,7 +68,7 @@ namespace ThreadingInCsharp.States
 
             this.chickenSprites = new List<Texture2D>();
             this.cowSprites = new List<Texture2D>();
-            this.liveStockThreadList = new Thread[1000];
+            this.liveStockThreadList = new Thread[5];
             this.liveStockSemaphore = new SemaphoreSlim(3);
             this.mouseState = mouseState;
             this.inventory = inventory;
@@ -298,35 +297,30 @@ namespace ThreadingInCsharp.States
         //add animals to game when you buy them
         public void AddAnimal(LiveStockItem animal)
         {
+            Random random = new Random();
             int i = 1;
             if (animal.GetName() == "chicken")
             {
                 chickenCount++;
-            }
-
-            for (int j = 0; j < chickenCount; j++)
-            {
-                this.liveStockThreadList[j] =  new Thread(() =>
-                {
-                    Chicken chick = new Chicken(walkingChicken, new Vector2(500, 220));
-                    components.Add(chick);
-                    this.liveStockSemaphore.Wait();
-
-                    chick.Click += Livestock_Click;
-                    i++;
-                });
-                
-                this.liveStockSemaphore.Release();
+                float xPosition = random.Next(390, 540);
+                float yPosition = random.Next(150, 350);
                
-                this.liveStockThreadList[j].Start();
-                
-
-
+                this.liveStockThreadList[chickenCount] = new Thread(() =>
+                {
+                    Chicken chick = new Chicken(walkingChicken, new Vector2(xPosition, yPosition));
+                    components.Add(chick);
+                    chick.Click += Livestock_Click;
+                });
+                this.liveStockThreadList[chickenCount].Start();
+                //this.liveStockSemaphore.Wait();
+                //this.liveStockSemaphore.Release();
             }
-           
+
+            //join  all threads in the main thread
+            this.liveStockThreadList[chickenCount].Join();
+
             if (animal.GetName() == "cow")
             {
-
                 Cow cow = new Cow(walkingCow, new Vector2(420, 200));
                 components.Add(cow);
                 cow.Click += Livestock_Click;
@@ -520,7 +514,7 @@ namespace ThreadingInCsharp.States
             }
             else if (((LiveStock)sender).GetName() == "chicken")
             {
-                this.liveStockThreadList[0].Join();
+                //this.liveStockThreadList[0].Join();
                 this.chickenCount -= 1;
 
                 for (int i = 0; i < inventory.Inventory.Count; i++)

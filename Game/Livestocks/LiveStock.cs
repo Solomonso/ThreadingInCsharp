@@ -65,25 +65,12 @@ namespace ThreadingInCsharp.Game.Livestocks
         {
          
             timeTillNextStage = timeTillNextStage.Subtract(gameTime.ElapsedGameTime);
-            //if (game.currHum >= minHum && game.currHum <= maxHum && game.currTemp >= minTemp && game.currTemp <= maxTemp)
-            //{
-            //    timeTillNextStage = timeTillNextStage.Subtract(gameTime.ElapsedGameTime * game.currSun / 10);
-            //}
-            //else
-            //{
-            //    timeTillNextStage = timeTillNextStage.Subtract(gameTime.ElapsedGameTime * game.currSun / 30);
-            //}
 
             if (timeTillNextStage.TotalMilliseconds < 0 && CurrentFrame < FrameCount - 1)
             {
                 CurrentFrame++;
                 timeTillNextStage = TimeSpan.FromSeconds(random.Next(minGrowTime, maxGrowTime));
             }
-            else if (timeTillNextStage.TotalMilliseconds < 0)
-            {
-                //do something
-            }
-            //base.Update(gameTime);
 
             Hover();
         }
@@ -95,7 +82,6 @@ namespace ThreadingInCsharp.Game.Livestocks
         //    if (_isHovering)
         //        colour = Color.Gray;
         //    spriteBatch.Draw(Texture, Position, new Rectangle(CurrentFrame * FrameWidth, 0, FrameWidth, FrameHeight), colour);
-
         //}
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
