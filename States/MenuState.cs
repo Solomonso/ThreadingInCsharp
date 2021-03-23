@@ -77,6 +77,11 @@ namespace ThreadingInCsharp.States
         {
             this.buttonSound.Play();
             _global.Exit();
+            //_global.menuStateThread.Join();
+            //_global.inventoryStateThread.Join();
+            //_global.settingStateThread.Join();
+            //_global.gameStateThread.Join();
+            //_global.shopStateThread.Join();
         }
 
         private void SettingsButton_Click(object sender, EventArgs e)

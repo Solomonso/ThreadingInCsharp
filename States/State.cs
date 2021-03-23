@@ -35,12 +35,14 @@ namespace ThreadingInCsharp.States
             _graphicsDevice = graphicsDevice;
             _content = content;
             this.components = new List<Entity>();
+           
         }
 
         public virtual void Update(GameTime gameTime)
         {
             foreach (Entity component in components)
             {
+               
                 component.Update(gameTime);
             }
             
