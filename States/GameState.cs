@@ -68,7 +68,8 @@ namespace ThreadingInCsharp.States
 
             this.chickenSprites = new List<Texture2D>();
             this.cowSprites = new List<Texture2D>();
-            this.liveStockThreadList = new Thread[5];
+            //Here we can set the number of live stocks possible
+            this.liveStockThreadList = new Thread[10];
             this.liveStockSemaphore = new SemaphoreSlim(3);
             this.mouseState = mouseState;
             this.inventory = inventory;
@@ -295,38 +296,42 @@ namespace ThreadingInCsharp.States
         }
 
         //add animals to game when you buy them
-        public void AddAnimal(LiveStockItem animal)
+        public int AddAnimal(LiveStockItem animal)
         {
-            Random random = new Random();
-            int i = 1;
-            if (animal.GetName() == "chicken")
+            if ((chickenCount + cowCount) < 9)
             {
-                chickenCount++;
-                float xPosition = random.Next(390, 540);
-                float yPosition = random.Next(150, 350);
-               
-                this.liveStockThreadList[chickenCount] = new Thread(() =>
+                Random random = new Random();
+                int i = 1;
+                if (animal.GetName() == "chicken")
                 {
-                    Chicken chick = new Chicken(walkingChicken, new Vector2(xPosition, yPosition));
-                    components.Add(chick);
-                    chick.Click += Livestock_Click;
-                });
-                this.liveStockThreadList[chickenCount].Start();
-                //this.liveStockSemaphore.Wait();
-                //this.liveStockSemaphore.Release();
-            }
+                    chickenCount++;
+                    float xPosition = random.Next(390, 540);
+                    float yPosition = random.Next(150, 350);
 
-            //join  all threads in the main thread
-            this.liveStockThreadList[chickenCount].Join();
+                    this.liveStockThreadList[chickenCount] = new Thread(() =>
+                    {
+                        Chicken chick = new Chicken(walkingChicken, new Vector2(xPosition, yPosition));
+                        components.Add(chick);
+                        chick.Click += Livestock_Click;
+                    });
+                    this.liveStockThreadList[chickenCount].Start();
+                    //this.liveStockSemaphore.Wait();
+                    //this.liveStockSemaphore.Release();
+                }
 
-            if (animal.GetName() == "cow")
-            {
-                Cow cow = new Cow(walkingCow, new Vector2(420, 200));
-                components.Add(cow);
-                cow.Click += Livestock_Click;
-                i++;
-                cowCount += 1;
+                //join  all threads in the main thread
+                this.liveStockThreadList[chickenCount].Join();
+
+                if (animal.GetName() == "cow")
+                {
+                    Cow cow = new Cow(walkingCow, new Vector2(420, 200));
+                    components.Add(cow);
+                    cow.Click += Livestock_Click;
+                    i++;
+                    cowCount += 1;
+                }
             }
+            return chickenCount + cowCount;
         }
 
         //event clicker for crops

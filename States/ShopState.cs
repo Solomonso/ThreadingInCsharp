@@ -91,10 +91,15 @@ namespace ThreadingInCsharp.States
 
         public void addItem(IInventoryItem item)
         {
-         
+
             if (item.GetName() == "chicken" || item.GetName() == "cow")
-                _global.Game.AddAnimal((LiveStockItem)item);
-          
+            {
+                int liveStockCount = _global.Game.AddAnimal((LiveStockItem)item);
+                if(liveStockCount < 9)
+				{
+                    inventory.Coins -= item.GetPrice();
+                }
+            }
         }
 
         public void PrepareLand(IInventoryItem item)
