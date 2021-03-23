@@ -29,7 +29,6 @@ namespace ThreadingInCsharp
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
         }
 
         protected override void Initialize()

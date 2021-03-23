@@ -106,11 +106,11 @@ namespace ThreadingInCsharp.States
             this.rainSound.IsLooped = true;
             if (currRain == true)
             {
-                rainSound.Play();
+               // rainSound.Play();
             }
             else
             {
-                rainSound.Stop();
+              //  rainSound.Stop();
             }
 
             var farmTile01 = new FarmTile(farm2, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 2/3, 210), 1, content, this);//fencetile

@@ -36,7 +36,7 @@ namespace ThreadingInCsharp.States
                 }
             }
             Texture2D closeButtonSprite = _content.Load<Texture2D>("CloseButton");
-            this.closeButton = new Button(closeButtonSprite, this.font, new Vector2(730, 10), 1);
+            this.closeButton = new Button(closeButtonSprite, this.font, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width/2, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width/2), 1);
             this.closeButton.Click += closeButton_Click;
             components.Add(this.closeButton);
         }
