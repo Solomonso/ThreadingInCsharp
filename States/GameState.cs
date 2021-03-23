@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using ThreadingInCsharp.Game;
 using ThreadingInCsharp.Game.Controls;
 using ThreadingInCsharp.Game.Crops;
@@ -56,7 +57,7 @@ namespace ThreadingInCsharp.States
 
         private Thread[] liveStockThreadList;
         private SemaphoreSlim liveStockSemaphore;
-           
+
         TimeSpan timeTillNextWeatherUpdate;
         TimeSpan timeTillNextRain;
 
@@ -108,7 +109,7 @@ namespace ThreadingInCsharp.States
             this.rainSound.IsLooped = true;
             if (currRain == true)
             {
-               // rainSound.Play();
+                // rainSound.Play();
             }
             else
             {
@@ -392,9 +393,8 @@ namespace ThreadingInCsharp.States
                     components.RemoveAt(i);
                 }
             }
-
-            MouseMethod();
-            PrepareSeed();
+            Task.Factory.StartNew(() => MouseMethod());
+            Task.Factory.StartNew(() => PrepareSeed());
 
             ////animal's movement
             //for (int i = 0; i < components.Count; i++)
@@ -503,7 +503,7 @@ namespace ThreadingInCsharp.States
         //event clicker for harvesting animals
         private void Livestock_Click(object sender, EventArgs e)
         {
-           
+
 
             if (((LiveStock)sender).GetName() == "cow")
             {
@@ -527,7 +527,7 @@ namespace ThreadingInCsharp.States
                     if ("chicken" == inventory.Inventory[i].GetName())
                     {
                         inventory.Inventory[i].SetCount();
-                       
+
                     }
                 }
                 ((Entity)sender).Texture = deadChicken;
