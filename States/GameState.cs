@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using ThreadingInCsharp.Game;
 using ThreadingInCsharp.Game.Controls;
 using ThreadingInCsharp.Game.Crops;
@@ -35,7 +36,9 @@ namespace ThreadingInCsharp.States
         ShopState shop;
         Weather weather;
         SeedItem selectedSeed = null;
+        Global global;
         List<FarmTile> farmTiles;
+        List<LiveStock> liveStocks;
         List<FarmTile> Tiles;
         List<Texture2D> chickenSprites;
         List<Texture2D> cowSprites;
@@ -55,22 +58,23 @@ namespace ThreadingInCsharp.States
         public int cowCount;
 
         private Thread[] liveStockThreadList;
-        private SemaphoreSlim liveStockSemaphore;
+        public SemaphoreSlim liveStockSemaphore;
            
         TimeSpan timeTillNextWeatherUpdate;
         TimeSpan timeTillNextRain;
 
         public GameState(Global game, GraphicsDevice graphicsDevice, ContentManager content, InventoryState inventory, MouseState mouseState, ShopState shop) : base(game, graphicsDevice, content)
         {
+            this.global = game;
             this.chickenCount = 0;
             this.cowCount = 0;
             font = _content.Load<SpriteFont>("defaultFont");
-
+            this.liveStocks = new List<LiveStock>();
             this.chickenSprites = new List<Texture2D>();
             this.cowSprites = new List<Texture2D>();
             //Here we can set the number of live stocks possible
             this.liveStockThreadList = new Thread[10];
-            this.liveStockSemaphore = new SemaphoreSlim(3);
+            this.liveStockSemaphore = new SemaphoreSlim(1);
             this.mouseState = mouseState;
             this.inventory = inventory;
             this.shop = shop;
@@ -88,7 +92,7 @@ namespace ThreadingInCsharp.States
 
             //animal sprites
             littleCow = content.Load<Texture2D>("cow");
-            walkingCow = content.Load<Texture2D>("Sprites/cow_walk_right");
+            walkingCow = content.Load<Texture2D>("cowgrow");
             littleChicken = content.Load<Texture2D>("chicken");
             walkingChicken = content.Load<Texture2D>("chickGrow2");
             deadChicken = content.Load<Texture2D>("Sprites/deadChicken");
@@ -298,41 +302,47 @@ namespace ThreadingInCsharp.States
         //add animals to game when you buy them
         public int AddAnimal(LiveStockItem animal)
         {
-            if ((chickenCount + cowCount) < 9)
+            
+            if (liveStocks.Count < 9)
             {
                 Random random = new Random();
-                int i = 1;
                 if (animal.GetName() == "chicken")
                 {
                     chickenCount++;
                     float xPosition = random.Next(390, 540);
                     float yPosition = random.Next(150, 350);
 
-                    this.liveStockThreadList[chickenCount] = new Thread(() =>
+                    this.liveStockThreadList[liveStocks.Count] = new Thread(() =>
                     {
-                        Chicken chick = new Chicken(walkingChicken, new Vector2(xPosition, yPosition));
+                        Chicken chick = new Chicken(global, walkingChicken, new Vector2(xPosition, yPosition));
+                        liveStocks.Add(chick);
                         components.Add(chick);
                         chick.Click += Livestock_Click;
                     });
-                    this.liveStockThreadList[chickenCount].Start();
-                    //this.liveStockSemaphore.Wait();
-                    //this.liveStockSemaphore.Release();
+                    this.liveStockThreadList[liveStocks.Count].Start();
+                    this.liveStockThreadList[liveStocks.Count].Join();
                 }
-
-                //join  all threads in the main thread
-                this.liveStockThreadList[chickenCount].Join();
+                
 
                 if (animal.GetName() == "cow")
                 {
-                    Cow cow = new Cow(walkingCow, new Vector2(420, 200));
-                    components.Add(cow);
-                    cow.Click += Livestock_Click;
-                    i++;
-                    cowCount += 1;
+                    cowCount++;
+                    float xPosition = random.Next(390, 540);
+                    float yPosition = random.Next(150, 350);
+                    this.liveStockThreadList[liveStocks.Count] = new Thread(() =>
+                    {
+                        Cow cow = new Cow(global, walkingCow, new Vector2(420, 200));
+                        liveStocks.Add(cow);
+                        components.Add(cow);
+                        cow.Click += Livestock_Click;
+                    });
+                    this.liveStockThreadList[liveStocks.Count].Start();
+                    this.liveStockThreadList[liveStocks.Count].Join();
                 }
             }
-            return chickenCount + cowCount;
+            return liveStocks.Count;
         }
+
 
         //event clicker for crops
         //important for adding crops to farmtile
@@ -386,14 +396,36 @@ namespace ThreadingInCsharp.States
 
             for (int i = 0; i < components.Count; i++)
             {
+            
+
                 components[i].Update(gameTime);
-                if (components[i].flaggedForDeletion)
-                {
-                    components.RemoveAt(i);
-                }
+                    if (components[i].flaggedForDeletion)
+                    {
+                        components.RemoveAt(i);
+                    }
+            
             }
 
-            MouseMethod();
+
+
+            if (liveStocks.Count > 0)
+            {
+            
+                    for (int j = 0; j < liveStocks.Count; j++)
+                    {
+                    this.liveStockSemaphore.Wait();
+                    liveStocks[j].Update(gameTime);
+                        if (liveStocks[j].flaggedForDeletion)
+                        {
+                            liveStocks.RemoveAt(j);
+                        }
+                    this.liveStockSemaphore.Release();
+                    
+                }
+            
+            }
+
+			MouseMethod();
             PrepareSeed();
 
             ////animal's movement
@@ -476,13 +508,7 @@ namespace ThreadingInCsharp.States
             //StartThread(gameTime);
         }
 
-        private void StartThread(GameTime gameTime, SpriteBatch spriteBatch)
-        {
-            Thread t1 = new Thread(() => base.Update(gameTime));
-            t1.Start();
-        }
-
-        private void shopButton_Click(object sender, EventArgs e)
+		private void shopButton_Click(object sender, EventArgs e)
         {
             this.buttonSound.Play();
             _global.ChangeState(_global.shop);
