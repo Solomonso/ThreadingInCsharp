@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
@@ -33,21 +34,26 @@ namespace ThreadingInCsharp.States
             MediaPlayer.IsRepeating = true;
             MediaPlayer.Play(song);
 
-            var newGameButton = new Button(buttonTexture, buttonFont, new Vector2(300, 200), 1)
+
+            var newGameButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 4), 1)
             {
                 Text = "Play Game",
             };
 
             newGameButton.Click += NewGameButton_Click;
 
-            var settingsButton = new Button(buttonTexture, buttonFont, new Vector2(300, 250), 1)
+
+            var settingsButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 3), 1)
+
             {
                 Text = "Settings",
             };
 
             settingsButton.Click += SettingsButton_Click;
 
-            var quitGameButton = new Button(buttonTexture, buttonFont, new Vector2(300, 300), 1)
+
+            var quitGameButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2,450f), 1)
+
             {
                 Text = "Quit Game",
             };
@@ -58,8 +64,9 @@ namespace ThreadingInCsharp.States
             {
                 newGameButton,
                 settingsButton,
-                quitGameButton,
+                quitGameButton
             };
+            
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

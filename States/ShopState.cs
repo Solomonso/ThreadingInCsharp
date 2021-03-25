@@ -44,8 +44,9 @@ namespace ThreadingInCsharp.States
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(_content.Load<Texture2D>("storeBackground"), new Vector2(25, 20), Color.White);
-            spriteBatch.DrawString(this.font, "Coins " + this.inventory.Coins, new Vector2(500, 350), Color.White);
+
+            spriteBatch.Draw(_content.Load<Texture2D>("storeBackground"), new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width/2, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height/2), Color.White);
+            spriteBatch.DrawString(this.font, "Coins " + this.inventory.Coins, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
 
             foreach (Entity component in components)
             {
