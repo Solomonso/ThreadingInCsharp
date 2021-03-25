@@ -76,8 +76,8 @@ namespace ThreadingInCsharp.Game
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             //add 550, 350 to the items of the shop
-            spriteBatch.Draw(slotTexture, Position + new Vector2(550,350), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(item.GetTexture(), Position, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(slotTexture, Position + new Vector2(540,340), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(item.GetTexture(), Position + new Vector2(550, 350), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             buyButton.Draw(gameTime, spriteBatch);
         }
 
