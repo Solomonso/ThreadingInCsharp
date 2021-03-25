@@ -36,7 +36,7 @@ namespace ThreadingInCsharp.States
                 }
             }
             Texture2D closeButtonSprite = _content.Load<Texture2D>("CloseButton");
-            this.closeButton = new Button(closeButtonSprite, this.font, new Vector2(730, 10), 1);
+            this.closeButton = new Button(closeButtonSprite, this.font, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width/2, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width/2), 1);
             this.closeButton.Click += closeButton_Click;
             components.Add(this.closeButton);
         }
@@ -45,7 +45,7 @@ namespace ThreadingInCsharp.States
         {
             spriteBatch.Begin();
 
-            spriteBatch.Draw(_content.Load<Texture2D>("storeBackground"), new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width/2, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height/2), Color.White);
+            spriteBatch.Draw(_content.Load<Texture2D>("storeBackground"), new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
             spriteBatch.DrawString(this.font, "Coins " + this.inventory.Coins, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
 
             foreach (Entity component in components)
@@ -68,20 +68,20 @@ namespace ThreadingInCsharp.States
 
         public void CreateInvList()
         {
-            SeedItem wheatSeed = new SeedItem(_content.Load<Texture2D>("seeds_wheat"), new Vector2(-100, -100), 100, 0, "wheat");
-            SeedItem lettuceSeed = new SeedItem(_content.Load<Texture2D>("seeds_lettuce"), new Vector2(-100, -100), 50, 0, "lettuce");
-            SeedItem cornSeed = new SeedItem(_content.Load<Texture2D>("seeds_corn"), new Vector2(-100, -100), 5, 0, "corn");
+            SeedItem wheatSeed = new SeedItem(_content.Load<Texture2D>("seeds_wheat"), new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), 100, 0, "wheat");
+            SeedItem lettuceSeed = new SeedItem(_content.Load<Texture2D>("seeds_lettuce"), new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), 50, 0, "lettuce");
+            SeedItem cornSeed = new SeedItem(_content.Load<Texture2D>("seeds_corn"), new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), 5, 0, "corn");
 
             this.invList.Add(wheatSeed);
             this.invList.Add(lettuceSeed);
             this.invList.Add(cornSeed);
 
-            LiveStockItem cowItem = new LiveStockItem(_content.Load<Texture2D>("cow"), new Vector2(-100, -100), 750, 0, "cow");
-            LiveStockItem chickenItem = new LiveStockItem(_content.Load<Texture2D>("chicken"), new Vector2(-100, -100), 300, 0, "chicken");
+            LiveStockItem cowItem = new LiveStockItem(_content.Load<Texture2D>("cow"), new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), 750, 0, "cow");
+            LiveStockItem chickenItem = new LiveStockItem(_content.Load<Texture2D>("chicken"), new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), 300, 0, "chicken");
             this.invList.Add(cowItem);
             this.invList.Add(chickenItem);
 
-            TileItem tileItem = new TileItem(_content.Load<Texture2D>("Sprites/land"), new Vector2(), 10000, 0, "farmslot");
+            TileItem tileItem = new TileItem(_content.Load<Texture2D>("Sprites/land"), new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), 10000, 0, "farmslot");
             this.invList.Add(tileItem);
         }
 

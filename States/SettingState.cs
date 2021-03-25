@@ -25,21 +25,21 @@ namespace ThreadingInCsharp.States
             background = _content.Load<Texture2D>("MenuBackground");
             this.buttonSfx = content.Load<SoundEffect>("Sound/selectionClick");
             this.buttonSound = buttonSfx.CreateInstance();
-            var newGameButton = new Button(buttonTexture, buttonFont, new Vector2(300, 200), 1)
+            var newGameButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width/2, 450f), 1)
             {
                 Text = "Back to Menu",
             };
 
             newGameButton.Click += BackToMenuButton_Click;
 
-            var soundOnButton = new Button(buttonTexture, buttonFont, new Vector2(300, 250), 1)
+            var soundOnButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width/2, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height/3), 1)
             {
                 Text = "Sound On",
             };
 
             soundOnButton.Click += soundOn_Click;
 
-            var soundOffButton = new Button(buttonTexture, buttonFont, new Vector2(300, 300), 1)
+            var soundOffButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width/2, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height/4), 1)
             {
                 Text = "Sound Off",
             };
@@ -57,7 +57,7 @@ namespace ThreadingInCsharp.States
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(background, new Rectangle(0, 0, 800, 500), Color.White);
+            spriteBatch.Draw(background, new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
 
             foreach (var component in components)
                 component.Draw(gameTime, spriteBatch);
