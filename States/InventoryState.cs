@@ -13,7 +13,6 @@ namespace ThreadingInCsharp.States
 {
    public class InventoryState : State
     {
-
         public List<IInventoryItem> Inventory;
         public List<SeedItem> seeds;
         public SeedItem selected = null;
@@ -29,7 +28,6 @@ namespace ThreadingInCsharp.States
         Texture2D chickenSprite;
         SpriteFont font;
         Button closeButton;
-
 
         public InventoryState(Global game, GraphicsDevice graphicsDevice, ContentManager contentManager)
             : base(game, graphicsDevice, contentManager)
@@ -62,13 +60,11 @@ namespace ThreadingInCsharp.States
                 GenerateSeedSlot(new Vector2(i * 200 + 150, 200), seeds[i]);
             }
 
-
             SpriteFont buttonFont = _content.Load<SpriteFont>("defaultFont");
             Texture2D closeButtonSprite = _content.Load<Texture2D>("CloseButton");
-            closeButton = new Button(closeButtonSprite, buttonFont, new Vector2(730, 10), 1);
+            closeButton = new Button(closeButtonSprite, buttonFont, new Vector2(1300, 360), 1);
             closeButton.Click += CloseButton_Click;
             components.Add(closeButton);
-
         }
               
         private void CloseButton_Click(object sender, EventArgs e)
@@ -79,8 +75,8 @@ namespace ThreadingInCsharp.States
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(_content.Load<Texture2D>("storeBackground"), new Vector2(25, 20), Color.White);
-            spriteBatch.DrawString(font, "Coins " + Coins, new Vector2(40, 40), Color.White);
+            spriteBatch.Draw(_content.Load<Texture2D>("storeBackground"), new Vector2(430, 270), Color.White);
+            spriteBatch.DrawString(font, "Coins " + Coins, new Vector2(550, 340), Color.White);
             foreach (Entity component in components)
             {
                 component.Draw(gameTime, spriteBatch);
@@ -91,7 +87,7 @@ namespace ThreadingInCsharp.States
         void CreateInventory()
         {
             CropItem wheatItem = new CropItem(wheatSprite, new Vector2(-100, -100), 600, 0, "wheat", 600);
-            SeedItem wheatSeed = new SeedItem(wheatSeedSprite, new Vector2(-100, -100), 100, 0, "wheat");
+            SeedItem wheatSeed = new SeedItem(wheatSeedSprite, new Vector2(0, 0), 100, 0, "wheat");
             CropItem lettuceItem = new CropItem(lettuceSprite, new Vector2(-100, -100), 250, 0, "lettuce", 250);
             SeedItem lettuceSeed = new SeedItem(lettuceSeedSprite, new Vector2(-100, -100), 50, 0, "lettuce");
             CropItem cornItem = new CropItem(cornSprite, new Vector2(-100, -100), 75, 0, "corn", 50);

@@ -34,7 +34,7 @@ namespace ThreadingInCsharp.States
             //MediaPlayer.IsRepeating = true;
             //MediaPlayer.Play(song);
 
-            var newGameButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 1 / 6, 950), 1)
+            var newGameButton = new Button(buttonTexture, buttonFont, new Vector2(865, 350), 1)
             {
                 Text = "Play Game",
             };
@@ -42,14 +42,14 @@ namespace ThreadingInCsharp.States
             newGameButton.Click += NewGameButton_Click;
 
 
-            var settingsButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 3), 1)
+            var settingsButton = new Button(buttonTexture, buttonFont, new Vector2(865, 450), 1)
             {
                 Text = "Settings",
             };
 
             settingsButton.Click += SettingsButton_Click;
 
-            var quitGameButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2,450f), 1)
+            var quitGameButton = new Button(buttonTexture, buttonFont, new Vector2(865, 550), 1)
             {
                 Text = "Quit Game",
             };

@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using ThreadingInCsharp.Game;
 using ThreadingInCsharp.Game.Controls;
 using ThreadingInCsharp.Game.Crops;
@@ -121,7 +120,6 @@ namespace ThreadingInCsharp.States
                 Tiles.Add(new FarmTile(farmTileTexture, new Vector2(-100, -100), 1, content, this));
             }
 
-
             for (int i = 0; i < (int)Math.Ceiling(((float)farmTiles.Count / 3)); i++)
             {
                 for (int j = 0; j < 3; j++)
@@ -134,13 +132,11 @@ namespace ThreadingInCsharp.States
                 }
             }
 
-
             for (int i = 0; i < 9; i++)
             {
                 chickenSprites.Add(littleChicken);
                 cowSprites.Add(littleCow);
             }
-
 
             var menuButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 1 / 6, 950), 1)
             {
@@ -215,7 +211,6 @@ namespace ThreadingInCsharp.States
         {
             Texture2D grass = _content.Load<Texture2D>("Grass");
 
-
             spriteBatch.Begin();
 
             spriteBatch.Draw(grass, new Rectangle(0, 0,GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
@@ -226,13 +221,11 @@ namespace ThreadingInCsharp.States
             {
                 //nightTime
                 spriteBatch.Draw(grass, new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), new Color(50, 50, 125));
-                spriteBatch.DrawString(font, "Time: " + time, new Vector2(640, 15), Color.White);
+                spriteBatch.DrawString(font, "Time : " + time, new Vector2(1750, 15), Color.White);
             }
-
 
             if (this.selectedSeed != null)
                 spriteBatch.Draw(selectedSeed.GetTexture(), new Vector2(200, 20), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
-
 
             if (currRain == true)
             {
@@ -242,18 +235,17 @@ namespace ThreadingInCsharp.States
             foreach (var component in components)
                 component.Draw(gameTime, spriteBatch);
 
-            spriteBatch.DrawString(font, "Time: " + time, new Vector2(640, 15), Color.White);
+            spriteBatch.DrawString(font, "Time : " + time, new Vector2(1750, 15), Color.White);
+            spriteBatch.DrawString(font, "Temperature : " + currTemp.ToString(), new Vector2(1750, 35), Color.White);
+            spriteBatch.DrawString(font, "Humidity : " + currHum.ToString(), new Vector2(1750, 55), Color.White);
+            spriteBatch.DrawString(font, "Sunshine : " + currSun.ToString(), new Vector2(1750, 75), Color.White);
 
-            spriteBatch.DrawString(font, "Temperature:" + currTemp.ToString(), new Vector2(640, 35), Color.White);
-            spriteBatch.DrawString(font, "Humidity:" + currHum.ToString(), new Vector2(640, 55), Color.White);
-            spriteBatch.DrawString(font, "Sunshine:" + currSun.ToString(), new Vector2(640, 75), Color.White);
+            spriteBatch.Draw(littleChicken, new Vector2(600, 5), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(littleCow, new Vector2(600, 30), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
 
-            spriteBatch.Draw(littleChicken, new Vector2(280, 5), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
-            spriteBatch.Draw(littleCow, new Vector2(280, 30), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
-
-            spriteBatch.Draw(slotTexture, new Vector2(195, 15), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(font, "X " + chickenCount, new Vector2(320, 15), Color.White);
-            spriteBatch.DrawString(font, "X " + cowCount, new Vector2(320, 40), Color.White);
+            spriteBatch.Draw(slotTexture, new Vector2(500, 15), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(font, "X " + chickenCount, new Vector2(650, 17), Color.White);
+            spriteBatch.DrawString(font, "X " + cowCount, new Vector2(650, 43), Color.White);
 
             if (this.selectedSeed != null)
             {

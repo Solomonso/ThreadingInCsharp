@@ -67,6 +67,7 @@ namespace ThreadingInCsharp
 
         public void _Resize()
         {
+            graphics.IsFullScreen = true;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             graphics.ApplyChanges();
