@@ -59,7 +59,7 @@ namespace ThreadingInCsharp.States
 
         public GameState(Global game, GraphicsDevice graphicsDevice, ContentManager content, InventoryState inventory, MouseState mouseState, ShopState shop) : base(game, graphicsDevice, content)
         {
-          
+
             this.resize = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
             this.chickenCount = 0;
             this.cowCount = 0;
@@ -112,7 +112,7 @@ namespace ThreadingInCsharp.States
                 rainSound.Stop();
             }
 
-            var farmTile01 = new FarmTile(farm2, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 2/3, 210), 1, content, this);//fencetile
+            var farmTile01 = new FarmTile(farm2, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 2 / 3, 210), 1, content, this);//fencetile
 
             for (int i = 0; i < 9; i++)
             {
@@ -213,7 +213,7 @@ namespace ThreadingInCsharp.States
 
             spriteBatch.Begin();
 
-            spriteBatch.Draw(grass, new Rectangle(0, 0,GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
+            spriteBatch.Draw(grass, new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
             DateTime dateTime = DateTime.Now;
             string time = dateTime.ToString("h:mm tt");
 
@@ -301,7 +301,6 @@ namespace ThreadingInCsharp.States
 
             if (animal.GetName() == "cow")
             {
-
                 Cow cow = new Cow(walkingCow, new Vector2(420, 200));
                 components.Add(cow);
                 cow.Click += Livestock_Click;

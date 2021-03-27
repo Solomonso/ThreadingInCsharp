@@ -61,8 +61,7 @@ namespace ThreadingInCsharp.States
                 newGameButton,
                 settingsButton,
                 quitGameButton
-            };
-            
+            };        
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

@@ -10,7 +10,7 @@ using ThreadingInCsharp.Game.Items;
 
 namespace ThreadingInCsharp.States
 {
-   public class InventoryState : State
+    public class InventoryState : State
     {
         public List<IInventoryItem> Inventory;
         public List<SeedItem> seeds;
@@ -65,7 +65,7 @@ namespace ThreadingInCsharp.States
             closeButton.Click += CloseButton_Click;
             components.Add(closeButton);
         }
-              
+
         private void CloseButton_Click(object sender, EventArgs e)
         {
             _global.ChangeState(_global.Game);
