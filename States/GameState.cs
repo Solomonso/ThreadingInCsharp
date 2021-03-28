@@ -338,7 +338,7 @@ namespace ThreadingInCsharp.States
                 i++;
                 cowCount += 1;
             }
-            return liveStocks.Count;
+            return chickenCount;
         }
 
 
@@ -407,22 +407,21 @@ namespace ThreadingInCsharp.States
 
 
 
-            if (liveStocks.Count > 0)
-            {
+           // if (liveStocks.Count > 0)
+           // {
             
-                    for (int j = 0; j < liveStocks.Count; j++)
-                    {
-                    this.liveStockSemaphore.Wait();
-                    liveStocks[j].Update(gameTime);
-                        if (liveStocks[j].flaggedForDeletion)
-                        {
-                            liveStocks.RemoveAt(j);
-                        }
-                    this.liveStockSemaphore.Release();
+                   // for (int j = 0; j < liveStocks.Count; j++)
+                   // {
+                    //this.liveStockSemaphore.Wait();
+                    //liveStocks[j].Update(gameTime);
+                        //if (liveStocks[j].flaggedForDeletion)
+                        //{
+                            //liveStocks.RemoveAt(j);
+                        //}
+                  //  this.liveStockSemaphore.Release();
                     
-                }
-            
-            }
+                //}
+
 
 			MouseMethod();
             PrepareSeed();

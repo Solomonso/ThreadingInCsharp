@@ -10,7 +10,7 @@ namespace ThreadingInCsharp.Game.Livestocks
 {
    public class Cow : LiveStock
     {
-        public Cow(Global game, Texture2D texture, Vector2 position) : base(game, texture, position, "cow", 4)
+        public Cow(Texture2D texture, Vector2 position) : base(texture, position, "cow", 4)
         {
 
         }

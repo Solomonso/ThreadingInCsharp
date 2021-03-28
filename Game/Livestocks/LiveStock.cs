@@ -10,7 +10,6 @@ namespace ThreadingInCsharp.Game.Livestocks
 {
     public abstract class LiveStock : Entity
     {
-        protected Global _global;
         string name;
         public TimeSpan timeTillNextStage;
         Random random;
@@ -31,10 +30,9 @@ namespace ThreadingInCsharp.Game.Livestocks
         }
 
         public bool Clicked { get; private set; }
-        public LiveStock(Global game, Texture2D texture, Vector2 position, string name, int frameCount) : base(texture, position, frameCount)
+        public LiveStock(Texture2D texture, Vector2 position, string name, int frameCount) : base(texture, position, frameCount)
         {
             this.name = name;
-            this._global = game;
             this.random = new Random();
             int secondsTillNextStage = random.Next(1, 10);
             this.timeTillNextStage = TimeSpan.FromSeconds(secondsTillNextStage);
@@ -75,7 +73,6 @@ namespace ThreadingInCsharp.Game.Livestocks
 
                 CurrentFrame++;
                 timeTillNextStage = TimeSpan.FromSeconds(random.Next(minGrowTime, maxGrowTime));
-                Thread.Sleep(10000);
 
             }
             Hover();
