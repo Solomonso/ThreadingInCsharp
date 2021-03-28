@@ -63,7 +63,6 @@ namespace ThreadingInCsharp.Game
                    
                     shop.addItem(item);
                     inventory.Coins -= item.GetPrice();
-                    
                 }
                 else if(this.item.GetName() == "farmslot" && this.item.GetCount() < 1)
                 {

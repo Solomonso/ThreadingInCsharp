@@ -36,7 +36,9 @@ namespace ThreadingInCsharp.States
         ShopState shop;
         Weather weather;
         SeedItem selectedSeed = null;
+        Global global;
         List<FarmTile> farmTiles;
+        List<LiveStock> liveStocks;
         List<FarmTile> Tiles;
         List<Texture2D> chickenSprites;
         List<Texture2D> cowSprites;
@@ -56,18 +58,22 @@ namespace ThreadingInCsharp.States
         public int cowCount;
         private Thread[] liveStockThreadList;
         private SemaphoreSlim liveStockSemaphore;
-
+           
         TimeSpan timeTillNextWeatherUpdate;
         TimeSpan timeTillNextRain;
 
         public GameState(Global game, GraphicsDevice graphicsDevice, ContentManager content, InventoryState inventory, MouseState mouseState, ShopState shop) : base(game, graphicsDevice, content)
         {
+            this.global = game;
             this.chickenCount = 0;
             this.cowCount = 0;
+            font = _content.Load<SpriteFont>("defaultFont");
+
             this.chickenSprites = new List<Texture2D>();
             this.cowSprites = new List<Texture2D>();
-            this.liveStockThreadList = new Thread[5];
-            this.liveStockSemaphore = new SemaphoreSlim(3);
+            //Here we can set the number of live stocks possible
+            this.liveStockThreadList = new Thread[10];
+            this.liveStockSemaphore = new SemaphoreSlim(1);
             this.mouseState = mouseState;
             this.inventory = inventory;
             this.shop = shop;
@@ -76,6 +82,16 @@ namespace ThreadingInCsharp.States
             this.LoadGameStateAssets();
             farmTiles = new List<FarmTile>();
             Tiles = new List<FarmTile>();
+            slotTexture = content.Load<Texture2D>("ItemSlot");
+
+            //animal sprites
+            littleCow = content.Load<Texture2D>("cow");
+            walkingCow = content.Load<Texture2D>("Sprites/cow_walk_right");
+            littleChicken = content.Load<Texture2D>("chicken");
+            walkingChicken = content.Load<Texture2D>("chickGrow2");
+            deadChicken = content.Load<Texture2D>("Sprites/deadChicken");
+
+            this.buttonSfx = content.Load<SoundEffect>("Sound/selectionClick");
             this.buttonSound = buttonSfx.CreateInstance();
 
             this.currHum = 40;
@@ -298,7 +314,7 @@ namespace ThreadingInCsharp.States
         }
 
         //add animals to game when you buy them
-        public void AddAnimal(LiveStockItem animal)
+        public int AddAnimal(LiveStockItem animal)
         {
 
             Random random = new Random();
@@ -322,7 +338,9 @@ namespace ThreadingInCsharp.States
                 i++;
                 cowCount += 1;
             }
+            return liveStocks.Count;
         }
+
 
         //event clicker for crops
         //important for adding crops to farmtile
@@ -377,14 +395,36 @@ namespace ThreadingInCsharp.States
 
             for (int i = 0; i < components.Count; i++)
             {
+            
+
                 components[i].Update(gameTime);
-                if (components[i].flaggedForDeletion)
-                {
-                    components.RemoveAt(i);
-                }
+                    if (components[i].flaggedForDeletion)
+                    {
+                        components.RemoveAt(i);
+                    }
+            
             }
 
-            MouseMethod();
+
+
+            if (liveStocks.Count > 0)
+            {
+            
+                    for (int j = 0; j < liveStocks.Count; j++)
+                    {
+                    this.liveStockSemaphore.Wait();
+                    liveStocks[j].Update(gameTime);
+                        if (liveStocks[j].flaggedForDeletion)
+                        {
+                            liveStocks.RemoveAt(j);
+                        }
+                    this.liveStockSemaphore.Release();
+                    
+                }
+            
+            }
+
+			MouseMethod();
             PrepareSeed();
 
             ////animal's movement
