@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using ThreadingInCsharp.States;
 
 namespace ThreadingInCsharp
@@ -41,51 +42,26 @@ namespace ThreadingInCsharp
 
         protected override void Initialize()
         {
-
-
-            mouseState = Mouse.GetState();
-            new Thread(() =>
-            {
+                mouseState = Mouse.GetState();
                 inventory = new InventoryState(this, graphics.GraphicsDevice, Content);
-            }).Start();
 
-            new Thread(() => 
-            {
-                 shop = new ShopState(this, graphics.GraphicsDevice, Content, inventory);
-            }).Start();
+                shop = new ShopState(this, graphics.GraphicsDevice, Content, inventory);
 
-             new Thread(() => 
-            {
                 menu = new MenuState(this, graphics.GraphicsDevice, Content);
-            }).Start();
 
-           new Thread(() => 
-            {
                 setting = new SettingState(this, graphics.GraphicsDevice, Content);
-            }).Start();
-
-           new Thread(() => 
-            {
                 Game = new GameState(this, graphics.GraphicsDevice, Content, inventory, mouseState, shop);
-            }).Start();
-
-           //inventoryStateThread.Start();
-           // shopStateThread.Start();
-            
-           // settingStateThread.Start();
-           // gameStateThread.Start();
 
             IsMouseVisible = true;
-            IsFixedTimeStep = true;
-            TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
-            base.Initialize();
+                IsFixedTimeStep = true;
+                TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
+                base.Initialize();
         }
 
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             currentState = menu;
-          
         }
 
         void _ChangeState(GameTime gameTime)
