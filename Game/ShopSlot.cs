@@ -19,7 +19,6 @@ namespace ThreadingInCsharp.Game
         ShopState shop;
         Texture2D slotTexture;
         Texture2D seedTexture;
-        private SemaphoreSlim liveStockSemaphore;
         public ShopSlot(ContentManager content, Vector2 position, IInventoryItem item, int frameCount, float scale, InventoryState inv, ShopState shop) : base(item.GetTexture(), position, 1)
         {
             this.shop = shop;
@@ -31,7 +30,6 @@ namespace ThreadingInCsharp.Game
             Texture2D buttonTexture = content.Load<Texture2D>("Button");
             slotTexture = content.Load<Texture2D>("ItemSlot");
             seedTexture = content.Load<Texture2D>("seeds");
-            this.liveStockSemaphore = new SemaphoreSlim(3);
 
             var buttonFont = content.Load<SpriteFont>("defaultFont");
 

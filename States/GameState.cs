@@ -305,23 +305,14 @@ namespace ThreadingInCsharp.States
             int i = 1;
             if (animal.GetName() == "chicken")
             {
-              //  chickenCount++;
-    
                 float xPosition = random.Next(390, 540);
                 float yPosition = random.Next(150, 350);
-                // this.liveStockThreadList[chickenCount] = new Thread(() =>
-                //  {
                         Chicken chick = new Chicken(walkingChicken, new Vector2(xPosition, yPosition));
                         components.Add(chick);
                         chick.Click += Livestock_Click;
                         chickenCount++;
-                        Thread.Sleep(TimeSpan.FromSeconds(30));
-                //});
-                //this.liveStockThreadList[chickenCount].Start();
-                //this.liveStockThreadList[chickenCount].Join();
+                        Thread.Sleep(TimeSpan.FromSeconds(30));//sleep for 30 seconds
             }
-
-            //join  all threads in the main thread
 
             if (animal.GetName() == "cow")
             {
@@ -511,7 +502,6 @@ namespace ThreadingInCsharp.States
             }
             else if (((LiveStock)sender).GetName() == "chicken")
             {
-                //this.liveStockThreadList[0].Join();
                 this.chickenCount -= 1;
 
                 for (int i = 0; i < inventory.Inventory.Count; i++)

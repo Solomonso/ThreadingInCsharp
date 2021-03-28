@@ -35,15 +35,6 @@ namespace ThreadingInCsharp
 
         protected override void Initialize()
         {
-<<<<<<< Updated upstream
-
-            mouseState = Mouse.GetState();
-            inventory = new InventoryState(this, graphics.GraphicsDevice, Content);
-            shop = new ShopState(this, graphics.GraphicsDevice, Content, inventory);
-            menu = new MenuState(this, graphics.GraphicsDevice, Content);
-            setting = new SettingState(this, graphics.GraphicsDevice, Content);
-            Game = new GameState(this, graphics.GraphicsDevice, Content, inventory, mouseState, shop);
-=======
                 mouseState = Mouse.GetState();
                 inventory = new InventoryState(this, graphics.GraphicsDevice, Content);
 
@@ -54,7 +45,6 @@ namespace ThreadingInCsharp
                 setting = new SettingState(this, graphics.GraphicsDevice, Content);
                 Game = new GameState(this, graphics.GraphicsDevice, Content, inventory, mouseState, shop);
 
->>>>>>> Stashed changes
             IsMouseVisible = true;
                 IsFixedTimeStep = true;
                 TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
