@@ -73,7 +73,7 @@ namespace ThreadingInCsharp.Game.Controls
             _previousMouse = _currentMouse;
             _currentMouse = Mouse.GetState();
 
-            mouseRectangle = new Rectangle(_currentMouse.X, _currentMouse.Y, 0, 0);
+            mouseRectangle = new Rectangle(_currentMouse.X, _currentMouse.Y, 10, 10);
 
             _isHovering = false;
 

@@ -32,12 +32,14 @@
       Executable="ThreadingInCsharp.exe"
       EntryPoint="ThreadingInCsharp.App">
       <uap:VisualElements
-        DisplayName="ThreadingInCsharp"
+        DisplayName="Threading In C#"
         Square150x150Logo="Assets\Logo.png"
         Square44x44Logo="Assets\SmallLogo.png"
         Description="ThreadingInCsharp"
         BackgroundColor="#464646">
-        <uap:SplashScreen Image="Assets\SplashScreen.png" />
+        <uap:SplashScreen Image="Assets\SplashScreen.png"  BackgroundColor="transparent"/>
+        <uap:DefaultTile/>
+        <uap:LockScreen BadgeLogo="Assets\BadgeLogo.png" Notification="badge"/>
       </uap:VisualElements>
     </Application>
   </Applications>
