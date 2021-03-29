@@ -40,7 +40,7 @@ namespace ThreadingInCsharp.Game
             this.buttonSfx = content.Load<SoundEffect>("Sound/selectionClick");
             this.buttonSound = buttonSfx.CreateInstance();
 
-            sellButton = new Button(buttonTexture, buttonFont, this.Position + new Vector2(570, 450), 1)
+            sellButton = new Button(buttonTexture, buttonFont, this.Position + new Vector2(10, 100), 1)
             {
                 Text = "sell"
             };
@@ -70,7 +70,7 @@ namespace ThreadingInCsharp.Game
             this.buttonSfx = content.Load<SoundEffect>("Sound/selectionClick");
             var buttonFont = content.Load<SpriteFont>("defaultFont");
 
-            selectButton = new Button(buttonTexture, buttonFont, this.Position + new Vector2(510, 490), 1)
+            selectButton = new Button(buttonTexture, buttonFont, this.Position + new Vector2(-30, 120), 1)
             {
                 Text = "select",
             };
@@ -81,30 +81,32 @@ namespace ThreadingInCsharp.Game
         {
             if (!this.seeditem.IsSelected())
             {
+
                 this.seeditem.Select(true);
             }
             else
             {
                 this.seeditem.Select(false);
             }
+
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             if (this.isSeed)
             {
-                spriteBatch.Draw(slotTexture, Position + new Vector2(550, 350), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
-                spriteBatch.Draw(itemCount, Position + new Vector2(577, 440), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
-                spriteBatch.Draw(Texture, Position + new Vector2(560, 360), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
-                spriteBatch.DrawString(font, "x " + seeditem.GetCount(), Position + new Vector2(590, 450), Color.Black);
+                spriteBatch.Draw(slotTexture, Position + new Vector2(-10, -11), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(itemCount, Position + new Vector2(19, 80), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(Texture, Position, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                spriteBatch.DrawString(font, "x " + seeditem.GetCount(), Position + new Vector2(33, 90), Color.Black);
                 selectButton.Draw(gameTime, spriteBatch);
             }
             else
             {
-                spriteBatch.Draw(slotTexture, Position + new Vector2(550, 350), null, Color.White, 0f, Vector2.Zero, scale * 0.75f, SpriteEffects.None, 0f);
-                spriteBatch.Draw(itemCount, Position + new Vector2(565, 405), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
-                spriteBatch.DrawString(font, "x " + item.GetCount(), Position + new Vector2(580, 410), Color.Black);
-                spriteBatch.Draw(Texture, Position + new Vector2(570, 365), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(slotTexture, Position + new Vector2(-10, -11), null, Color.White, 0f, Vector2.Zero, scale * 0.75f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(itemCount, Position + new Vector2(4, 50), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                spriteBatch.DrawString(font, "x " + item.GetCount(), Position + new Vector2(18, 60), Color.Black);
+                spriteBatch.Draw(Texture, Position + new Vector2(15, 5), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
                 sellButton.Draw(gameTime, spriteBatch);
             }
         }
@@ -116,12 +118,15 @@ namespace ThreadingInCsharp.Game
             else if (seeditem != null)
                 selectButton.Text = "select";
 
+
             if (this.isSeed)
             {
+
                 selectButton.Update(gameTime);
             }
             else
             {
+
                 sellButton.Update(gameTime);
             }
         }

@@ -7,14 +7,14 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="ThreadingInCSharp"
+    Name="ThreadingInCsharp"
     Publisher="CN=ThreadingInCsharp"
     Version="1.0.0.0" />
   
   <mp:PhoneIdentity PhoneProductId="00000000-0000-0000-0000-000000000000" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Threading In C#</DisplayName>
+    <DisplayName>ThreadingInCsharp</DisplayName>
     <PublisherDisplayName>ThreadingInCsharp</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -32,14 +32,12 @@
       Executable="ThreadingInCsharp.exe"
       EntryPoint="ThreadingInCsharp.App">
       <uap:VisualElements
-        DisplayName="Threading In C#"
+        DisplayName="ThreadingInCsharp"
         Square150x150Logo="Assets\Logo.png"
         Square44x44Logo="Assets\SmallLogo.png"
-        Description="Threading In C#"
+        Description="ThreadingInCsharp"
         BackgroundColor="#464646">
-        <uap:SplashScreen  BackgroundColor="transparent" Image="Assets\SplashScreen.png"/>
-        <uap:DefaultTile ShortName="Threading In C#"/>
-        <uap:LockScreen BadgeLogo="Assets\BadgeLogo.png" Notification="badge"/>
+        <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
     </Application>
   </Applications>
