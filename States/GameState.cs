@@ -299,24 +299,30 @@ namespace ThreadingInCsharp.States
         //add animals to game when you buy them
         public void AddAnimal(LiveStockItem animal)
         {
-            int i = 1;
-               if (animal.GetName() == "chicken")
+            if ((chickenCount + cowCount) < 9)
+            {
+                Random random = new Random();
+                int i = 1;
+                if (animal.GetName() == "chicken")
                 {
-                    Chicken chick = new Chicken(walkingChicken, new Vector2(500, 220));
-                    components.Add(chick);
-                    chick.Click += Livestock_Click;
-                    i++;
                     chickenCount++;
-                }
+                    float xPosition = random.Next(390, 540);
+                    float yPosition = random.Next(150, 350);
 
-                if (animal.GetName() == "cow")
-                {
-                    Cow cow = new Cow(walkingCow, new Vector2(420, 200));
-                    components.Add(cow);
-                    cow.Click += Livestock_Click;
-                    i++;
-                    cowCount += 1;
+                    this.liveStockThreadList[chickenCount] = new Thread(() =>
+                    {
+                        Chicken chick = new Chicken(walkingChicken, new Vector2(xPosition, yPosition));
+                        components.Add(chick);
+                        chick.Click += Livestock_Click;
+                    });
+                    this.liveStockThreadList[chickenCount].Start();
+                    //this.liveStockSemaphore.Wait();
+                    //this.liveStockSemaphore.Release();
                 }
+                //join  all threads in the main thread
+                this.liveStockThreadList[chickenCount].Join();
+            }
+            return chickenCount + cowCount;
         }
 
         void MouseMethod()
@@ -466,7 +472,6 @@ namespace ThreadingInCsharp.States
             _global.ChangeState(_global.menu);
         }
 
-        //event clicker for crops
         private void farmTile_Click(object sender, EventArgs e)
         {
             if (selectedSeed != null && ((FarmTile)sender).plantedSeed == null)
@@ -521,7 +526,7 @@ namespace ThreadingInCsharp.States
                 Thread.Sleep(3000); //Suspend the currHum(current thread) for 3 seconds
                 currSun = weather.randomSun();
                 this.timeTillNextWeatherUpdate = new TimeSpan(0, 0, 10);
-             
+
             }
         }
 
