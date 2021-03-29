@@ -76,7 +76,10 @@ namespace ThreadingInCsharp.States
             this.invList.Add(lettuceSeed);
             this.invList.Add(cornSeed);
 
-            Task.WaitAll(allTasks);
+            LiveStockItem cowItem = new LiveStockItem(_content.Load<Texture2D>("cow"), new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), 750, 0, "cow");
+            LiveStockItem chickenItem = new LiveStockItem(_content.Load<Texture2D>("chicken"), new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), 300, 0, "chicken");
+            this.invList.Add(cowItem);
+            this.invList.Add(chickenItem);
 
             TileItem tileItem = new TileItem(_content.Load<Texture2D>("Sprites/land"), new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width/2, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height/10), 10000, 0, "farmslot");
             this.invList.Add(tileItem);
