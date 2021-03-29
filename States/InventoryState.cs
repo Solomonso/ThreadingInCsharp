@@ -66,7 +66,7 @@ namespace ThreadingInCsharp.States
 
             SpriteFont buttonFont = _content.Load<SpriteFont>("defaultFont");
             Texture2D closeButtonSprite = _content.Load<Texture2D>("CloseButton");
-            closeButton = new Button(closeButtonSprite, buttonFont, new Vector2(730, 10), 1);
+            closeButton = new Button(closeButtonSprite, buttonFont, new Vector2(1300, 360), 1);
             closeButton.Click += CloseButton_Click;
             components.Add(closeButton);
 
@@ -80,8 +80,8 @@ namespace ThreadingInCsharp.States
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(_content.Load<Texture2D>("storeBackground"), new Vector2(25, 20), Color.White);
-            spriteBatch.DrawString(font, "Coins " + Coins, new Vector2(40, 40), Color.White);
+            spriteBatch.Draw(_content.Load<Texture2D>("storeBackground"), new Vector2(250, 160), Color.White);
+            spriteBatch.DrawString(font, "Coins " + Coins, new Vector2(550, 340), Color.White);
             foreach (Entity component in components)
             {
                 component.Draw(gameTime, spriteBatch);

@@ -47,8 +47,8 @@ namespace ThreadingInCsharp.States
         {
             spriteBatch.Begin();
 
-            spriteBatch.Draw(_content.Load<Texture2D>("storeBackground"), new Vector2(250, 200), Color.White);
-            spriteBatch.DrawString(this.font, "Coins " + this.inventory.Coins, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
+            spriteBatch.Draw(_content.Load<Texture2D>("storeBackground"), new Vector2(250, 160), Color.White);
+            spriteBatch.DrawString(this.font, "Coins " + this.inventory.Coins, new Vector2(550, 340), Color.White);
 
             foreach (Entity component in components)
             {
