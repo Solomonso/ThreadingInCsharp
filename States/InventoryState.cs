@@ -99,14 +99,51 @@ namespace ThreadingInCsharp.States
             MeatItem cowItem = new MeatItem(cowSprite, new Vector2(-100, -100), 750, 0, "cow", 1150);
             MeatItem chickenItem = new MeatItem(chickenSprite, new Vector2(-100, -100), 300, 0, "chicken", 650);
 
-            Inventory.Add(wheatItem);
-            Inventory.Add(lettuceItem);
-            Inventory.Add(cornItem);
-            Inventory.Add(cowItem);
-            Inventory.Add(chickenItem);
-            seeds.Add(wheatSeed);
-            seeds.Add(lettuceSeed);
-            seeds.Add(cornSeed);
+                Task.Factory.StartNew(() =>
+                {
+                    CropItem wheatItem = new CropItem(wheatSprite, new Vector2(-100, -100), 600, 0, "wheat", 600);
+                    Inventory.Add(wheatItem);
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                    SeedItem wheatSeed = new SeedItem(wheatSeedSprite, new Vector2(-100, -100), 100, 0, "wheat");
+                    seeds.Add(wheatSeed);
+                }),
+
+                Task.Factory.StartNew(() =>
+                {
+                    CropItem lettuceItem = new CropItem(lettuceSprite, new Vector2(-100, -100), 250, 0, "lettuce", 250);
+                    Inventory.Add(lettuceItem);
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                    SeedItem lettuceSeed = new SeedItem(lettuceSeedSprite, new Vector2(-100, -100), 50, 0, "lettuce");
+                    seeds.Add(lettuceSeed);
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                   CropItem cornItem = new CropItem(cornSprite, new Vector2(-100, -100), 75, 0, "corn", 50);
+                    Inventory.Add(cornItem);
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                   SeedItem cornSeed = new SeedItem(cornSeedSprite, new Vector2(-100, -100), 5, 0, "corn");
+                   seeds.Add(cornSeed);
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                   MeatItem cowItem = new MeatItem(cowSprite, new Vector2(-100, -100), 750, 0, "cow", 1150);
+                   Inventory.Add(cowItem);
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                   MeatItem chickenItem = new MeatItem(chickenSprite, new Vector2(-100, -100), 300, 0, "chicken", 650);
+                   Inventory.Add(chickenItem);
+                }),
+
+        };
+
+            Task.WaitAll(allTasks); ////blocks the current thread until all other tasks have completed execution
         }
 
         private void GenerateSlot(Vector2 position, IInventoryItem item)
