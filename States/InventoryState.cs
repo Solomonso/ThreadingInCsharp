@@ -143,7 +143,7 @@ namespace ThreadingInCsharp.States
 
         };
 
-            Task.WaitAll(allTasks);
+            Task.WaitAll(allTasks); ////blocks the current thread until all other tasks have completed execution
         }
 
         private void GenerateSlot(Vector2 position, IInventoryItem item)
