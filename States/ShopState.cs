@@ -103,7 +103,7 @@ namespace ThreadingInCsharp.States
                 }),
              };
 
-            Task.WaitAll(allTasks); //blocks the current thread until all other tasks have completed execution
+            Task.WaitAll(allTasks);
 
         }
 
