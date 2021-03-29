@@ -22,9 +22,9 @@ namespace ThreadingInCsharp.States
         Texture2D buttonTexture;
         Texture2D slotTexture;
         Texture2D littleCow;
-        Texture2D walkingCow;
+        Texture2D chickenGrow;
         Texture2D littleChicken;
-        Texture2D walkingChicken;
+        Texture2D cowGrow;
         Texture2D deadChicken;
         Texture2D farm2;
         Texture2D farmTileTexture;
@@ -207,14 +207,15 @@ namespace ThreadingInCsharp.States
             slotTexture = _content.Load<Texture2D>("ItemSlot");
 
             //animal sprites
-            littleCow = _content.Load<Texture2D>("cow");
-            walkingCow = _content.Load<Texture2D>("Sprites/cow_walk_right");
             littleChicken = _content.Load<Texture2D>("chicken");
-            walkingChicken = _content.Load<Texture2D>("chickGrow2");
+            littleCow = _content.Load<Texture2D>("cow");
+            chickenGrow = _content.Load<Texture2D>("cowgrow");
+            cowGrow = _content.Load<Texture2D>("chickGrow2");
             deadChicken = _content.Load<Texture2D>("Sprites/deadChicken");
 
             this.buttonSfx = _content.Load<SoundEffect>("Sound/selectionClick");
         }
+
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             Texture2D grass = _content.Load<Texture2D>("Grass");
@@ -305,31 +306,26 @@ namespace ThreadingInCsharp.States
             int i = 1;
             if (animal.GetName() == "chicken")
             {
-              //  chickenCount++;
-    
                 float xPosition = random.Next(390, 540);
                 float yPosition = random.Next(150, 350);
-                // this.liveStockThreadList[chickenCount] = new Thread(() =>
-                //  {
-                        Chicken chick = new Chicken(walkingChicken, new Vector2(xPosition, yPosition));
-                        components.Add(chick);
-                        chick.Click += Livestock_Click;
-                        chickenCount++;
-                        Thread.Sleep(TimeSpan.FromSeconds(30));
-                //});
-                //this.liveStockThreadList[chickenCount].Start();
-                //this.liveStockThreadList[chickenCount].Join();
+                Chicken chick = new Chicken(cowGrow, new Vector2(xPosition, yPosition));
+                components.Add(chick);
+                chick.Click += Livestock_Click;
+                chickenCount++;
+                Thread.Sleep(TimeSpan.FromSeconds(30));
             }
 
             //join  all threads in the main thread
-
             if (animal.GetName() == "cow")
             {
-                Cow cow = new Cow(walkingCow, new Vector2(420, 200));
+                float xPosition = random.Next(390, 540);
+                float yPosition = random.Next(150, 350);
+                Cow cow = new Cow(chickenGrow, new Vector2(xPosition, yPosition));
                 components.Add(cow);
                 cow.Click += Livestock_Click;
-                i++;
-                cowCount += 1;
+                //i++;
+                cowCount++;
+                Thread.Sleep(TimeSpan.FromSeconds(30));
             }
         }
 
@@ -499,31 +495,36 @@ namespace ThreadingInCsharp.States
         {
             if (((LiveStock)sender).GetName() == "cow")
             {
-                this.cowCount -= 1;
-                for (int i = 0; i < inventory.Inventory.Count; i++)
+                if (((LiveStock)sender).CurrentFrame > 2)
                 {
-                    if ("cow" == inventory.Inventory[i].GetName())
+                    this.cowCount -= 1;
+                    for (int i = 0; i < inventory.Inventory.Count; i++)
                     {
-                        inventory.Inventory[i].SetCount();
+                        if ("cow" == inventory.Inventory[i].GetName())
+                        {
+                            inventory.Inventory[i].SetCount();
+                        }
                     }
+                    ((Entity)sender).flaggedForDeletion = true;
                 }
-                ((Entity)sender).flaggedForDeletion = true;
             }
             else if (((LiveStock)sender).GetName() == "chicken")
             {
-                //this.liveStockThreadList[0].Join();
-                this.chickenCount -= 1;
-
-                for (int i = 0; i < inventory.Inventory.Count; i++)
+                if (((LiveStock)sender).CurrentFrame > 2)
                 {
-                    if ("chicken" == inventory.Inventory[i].GetName())
-                    {
-                        inventory.Inventory[i].SetCount();
+                    this.chickenCount -= 1;
 
+                    for (int i = 0; i < inventory.Inventory.Count; i++)
+                    {
+                        if ("chicken" == inventory.Inventory[i].GetName())
+                        {
+                            inventory.Inventory[i].SetCount();
+
+                        }
                     }
-                }
                 ((Entity)sender).Texture = deadChicken;
-                ((Entity)sender).flaggedForDeletion = true;
+                    ((Entity)sender).flaggedForDeletion = true;
+                }
             }
         }
 

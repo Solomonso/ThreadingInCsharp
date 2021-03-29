@@ -97,16 +97,27 @@ namespace ThreadingInCsharp.States
 
         public void addItem(IInventoryItem item)
         {
-            Semaphore liveStockSemphore = new Semaphore(initialCount: 3, maximumCount: 3, name: "liveStockSemaphore");
+            Semaphore chickenSemaphore = new Semaphore(initialCount: 3, maximumCount: 3, name: "chickenSemaphore");
+            Semaphore cowSemaphore = new Semaphore(initialCount: 3, maximumCount: 3, name: "cowSemaphore");
 
-            if (item.GetName() == "chicken" || item.GetName() == "cow")
+            if (item.GetName() == "chicken")
             {
-                    Task.Factory.StartNew(() =>
-                    {
-                        liveStockSemphore.WaitOne();
-                        _global.Game.AddAnimal((LiveStockItem)item);
-                        liveStockSemphore.Release();
-                    });
+                Task.Factory.StartNew(() =>
+                {
+                    chickenSemaphore.WaitOne();
+                    _global.Game.AddAnimal((LiveStockItem)item);
+                    chickenSemaphore.Release();
+                });
+            }
+
+            if (item.GetName() == "cow")
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    cowSemaphore.WaitOne();
+                    _global.Game.AddAnimal((LiveStockItem)item);
+                    cowSemaphore.Release();
+                });
             }
         }
 

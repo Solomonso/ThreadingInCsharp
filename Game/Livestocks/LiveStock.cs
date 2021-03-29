@@ -18,8 +18,6 @@ namespace ThreadingInCsharp.Game.Livestocks
         private MouseState _currentMouse;
         private bool _isHovering;
         private MouseState _previousMouse;
-        private SemaphoreSlim liveStockSemaphore;
-
         public event EventHandler Click;
         public Rectangle Rectangle
         {
@@ -38,7 +36,6 @@ namespace ThreadingInCsharp.Game.Livestocks
             this.timeTillNextStage = TimeSpan.FromSeconds(secondsTillNextStage);
             this.minGrowTime = 1;
             this.maxGrowTime = 10;
-            this.liveStockSemaphore = new SemaphoreSlim(3);
         }
 
         public string GetName()
