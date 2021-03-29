@@ -6,7 +6,9 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
+using System.Threading;
 using ThreadingInCsharp.Game;
 using ThreadingInCsharp.Game.Controls;
 
@@ -20,6 +22,7 @@ namespace ThreadingInCsharp.States
         Song song;
         SoundEffect buttonSfx;
         SoundEffectInstance buttonSound;
+        BackgroundWorker bw = new BackgroundWorker();
 
         public MenuState(Global game, GraphicsDevice graphicsDevice, ContentManager content)
             : base(game, graphicsDevice, content)
@@ -79,6 +82,11 @@ namespace ThreadingInCsharp.States
         {
             this.buttonSound.Play();
             _global.Exit();
+            //_global.menuStateThread.Join();
+            //_global.inventoryStateThread.Join();
+            //_global.settingStateThread.Join();
+            //_global.gameStateThread.Join();
+            //_global.shopStateThread.Join();
         }
 
         private void SettingsButton_Click(object sender, EventArgs e)
@@ -89,8 +97,8 @@ namespace ThreadingInCsharp.States
 
         private void NewGameButton_Click(object sender, EventArgs e)
         {
-            this.buttonSound.Play();
-            _global.ChangeState(_global.Game);
+                this.buttonSound.Play();
+                _global.ChangeState(_global.Game);
         }
 
         public override void PostUpdate(GameTime gameTime)

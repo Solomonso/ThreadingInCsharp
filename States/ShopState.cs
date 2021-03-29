@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using ThreadingInCsharp.Game;
 using ThreadingInCsharp.Game.Controls;
 using ThreadingInCsharp.Game.interfaces;
@@ -17,6 +19,8 @@ namespace ThreadingInCsharp.States
         Button closeButton;
         private InventoryState inventory;
         SpriteFont font;
+        private Thread[] liveStockThreadList;
+
 
         public ShopState(Global game, GraphicsDevice graphicsDevice, ContentManager contentManager, InventoryState inventory)
             : base(game, graphicsDevice, contentManager)
@@ -24,6 +28,8 @@ namespace ThreadingInCsharp.States
             this.inventory = inventory;
             this.font = _content.Load<SpriteFont>("defaultFont");
             this.invList = new List<IInventoryItem>();
+            this.liveStockThreadList = new Thread[5];
+
             CreateInvList();
 
             //i dictates how many rows should be created (number of inventory items divided by 3 rounded up), j draws 3 items every row
@@ -92,8 +98,17 @@ namespace ThreadingInCsharp.States
 
         public void addItem(IInventoryItem item)
         {
+            Semaphore liveStockSemphore = new Semaphore(initialCount: 3, maximumCount: 3, name: "liveStockSemaphore");
+
             if (item.GetName() == "chicken" || item.GetName() == "cow")
-                _global.Game.AddAnimal((LiveStockItem)item);
+            {
+                    Task.Factory.StartNew(() =>
+                    {
+                        liveStockSemphore.WaitOne();
+                        _global.Game.AddAnimal((LiveStockItem)item);
+                        liveStockSemphore.Release();
+                    });
+            }
         }
 
         public void PrepareLand(IInventoryItem item)

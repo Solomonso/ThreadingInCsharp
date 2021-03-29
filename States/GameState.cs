@@ -55,7 +55,8 @@ namespace ThreadingInCsharp.States
         public bool currRain;
         public int chickenCount;
         public int cowCount;
-        private Vector2 resize;
+        private Thread[] liveStockThreadList;
+        private SemaphoreSlim liveStockSemaphore;
 
         TimeSpan timeTillNextWeatherUpdate;
         TimeSpan timeTillNextRain;
@@ -66,8 +67,6 @@ namespace ThreadingInCsharp.States
             this.resize = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
             this.chickenCount = 0;
             this.cowCount = 0;
-            font = _content.Load<SpriteFont>("defaultFont");
-
             this.chickenSprites = new List<Texture2D>();
             this.cowSprites = new List<Texture2D>();
 
@@ -76,24 +75,9 @@ namespace ThreadingInCsharp.States
             this.shop = shop;
 
             this.weather = new Weather();
-
-            this.rainTexture = content.Load<Texture2D>("rain");
-            this.buttonTexture = content.Load<Texture2D>("Button");
-            buttonFont = content.Load<SpriteFont>("defaultFont");
-            this.farmTileTexture = content.Load<Texture2D>("dirt");
-            farm2 = content.Load<Texture2D>("Sprites/dirt2");
+            this.LoadGameStateAssets();
             farmTiles = new List<FarmTile>();
             Tiles = new List<FarmTile>();
-            slotTexture = content.Load<Texture2D>("ItemSlot");
-
-            //animal sprites
-            littleCow = content.Load<Texture2D>("cow");
-            walkingCow = content.Load<Texture2D>("Sprites/cow_walk_right");
-            littleChicken = content.Load<Texture2D>("chicken");
-            walkingChicken = content.Load<Texture2D>("Sprites/chicken_walk_left");
-            deadChicken = content.Load<Texture2D>("Sprites/deadChicken");
-
-            this.buttonSfx = content.Load<SoundEffect>("Sound/selectionClick");
             this.buttonSound = buttonSfx.CreateInstance();
 
             this.currHum = 40;
@@ -108,7 +92,7 @@ namespace ThreadingInCsharp.States
             this.rainSound.IsLooped = true;
             if (currRain == true)
             {
-               // rainSound.Play();
+                // rainSound.Play();
             }
             else
             {
@@ -213,6 +197,26 @@ namespace ThreadingInCsharp.States
                 ((FarmTile)sender).addSeed(selectedSeed);
         }
 
+        private void LoadGameStateAssets()
+        {
+            this.font = _content.Load<SpriteFont>("defaultFont");
+            this.farmTileTexture = _content.Load<Texture2D>("dirt");
+            this.rainTexture = _content.Load<Texture2D>("rain");
+            this.buttonTexture = _content.Load<Texture2D>("Button");
+            buttonFont = _content.Load<SpriteFont>("defaultFont");
+
+            farm2 = _content.Load<Texture2D>("Sprites/dirt2");
+            slotTexture = _content.Load<Texture2D>("ItemSlot");
+
+            //animal sprites
+            littleCow = _content.Load<Texture2D>("cow");
+            walkingCow = _content.Load<Texture2D>("Sprites/cow_walk_right");
+            littleChicken = _content.Load<Texture2D>("chicken");
+            walkingChicken = _content.Load<Texture2D>("chickGrow2");
+            deadChicken = _content.Load<Texture2D>("Sprites/deadChicken");
+
+            this.buttonSfx = _content.Load<SoundEffect>("Sound/selectionClick");
+        }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             Texture2D grass = _content.Load<Texture2D>("Grass");
@@ -299,24 +303,52 @@ namespace ThreadingInCsharp.States
         //add animals to game when you buy them
         public void AddAnimal(LiveStockItem animal)
         {
-            int i = 1;
-               if (animal.GetName() == "chicken")
-                {
-                    Chicken chick = new Chicken(walkingChicken, new Vector2(500, 220));
-                    components.Add(chick);
-                    chick.Click += Livestock_Click;
-                    i++;
-                    chickenCount++;
-                }
 
-                if (animal.GetName() == "cow")
-                {
-                    Cow cow = new Cow(walkingCow, new Vector2(420, 200));
-                    components.Add(cow);
-                    cow.Click += Livestock_Click;
-                    i++;
-                    cowCount += 1;
-                }
+            Random random = new Random();
+            int i = 1;
+            if (animal.GetName() == "chicken")
+            {
+              //  chickenCount++;
+    
+                float xPosition = random.Next(390, 540);
+                float yPosition = random.Next(150, 350);
+                // this.liveStockThreadList[chickenCount] = new Thread(() =>
+                //  {
+                        Chicken chick = new Chicken(walkingChicken, new Vector2(xPosition, yPosition));
+                        components.Add(chick);
+                        chick.Click += Livestock_Click;
+                        chickenCount++;
+                        Thread.Sleep(TimeSpan.FromSeconds(30));
+                //});
+                //this.liveStockThreadList[chickenCount].Start();
+                //this.liveStockThreadList[chickenCount].Join();
+            }
+
+            //join  all threads in the main thread
+
+            if (animal.GetName() == "cow")
+            {
+                Cow cow = new Cow(walkingCow, new Vector2(420, 200));
+                components.Add(cow);
+                cow.Click += Livestock_Click;
+                i++;
+                cowCount += 1;
+            }
+        }
+
+        //event clicker for crops
+        //important for adding crops to farmtile
+        private void farmTile_Click(object sender, EventArgs e)
+        {
+            if (selectedSeed != null && ((FarmTile)sender).plantedSeed == null)
+            {
+
+                ((FarmTile)sender).addSeed(selectedSeed);
+            }
+            else if (((FarmTile)sender).plantedSeed != null)
+            {
+                ((FarmTile)sender).harvestCrop();
+            }
         }
 
         void MouseMethod()
@@ -502,6 +534,7 @@ namespace ThreadingInCsharp.States
                     if ("chicken" == inventory.Inventory[i].GetName())
                     {
                         inventory.Inventory[i].SetCount();
+
                     }
                 }
                 ((Entity)sender).Texture = deadChicken;
