@@ -522,7 +522,7 @@ namespace ThreadingInCsharp.States
 
                         }
                     }
-                ((Entity)sender).Texture = deadChicken;
+                    ((Entity)sender).Texture = deadChicken;
                     ((Entity)sender).flaggedForDeletion = true;
                 }
             }
