@@ -31,7 +31,7 @@ namespace ThreadingInCsharp.States
             this.buttonSound = buttonSfx.CreateInstance();
 
             MediaPlayer.IsRepeating = true;
-            MediaPlayer.Play(song);
+           // MediaPlayer.Play(song);
 
             var newGameButton = new Button(buttonTexture, buttonFont, new Vector2(300, 200), 1)
             {
