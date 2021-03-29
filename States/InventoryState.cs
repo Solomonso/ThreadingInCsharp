@@ -3,10 +3,13 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 using ThreadingInCsharp.Game;
 using ThreadingInCsharp.Game.Controls;
 using ThreadingInCsharp.Game.interfaces;
 using ThreadingInCsharp.Game.Items;
+using ThreadingInCsharp.Game.Livestocks;
 
 namespace ThreadingInCsharp.States
 {
@@ -14,6 +17,7 @@ namespace ThreadingInCsharp.States
     {
         public List<IInventoryItem> Inventory;
         public List<SeedItem> seeds;
+        public List<LiveStock> chicken;
         public SeedItem selected = null;
         public int Coins;
 
@@ -33,7 +37,8 @@ namespace ThreadingInCsharp.States
         {
             Inventory = new List<IInventoryItem>();
             seeds = new List<SeedItem>();
-            this.Coins = 1000;
+            chicken = new List<LiveStock>();
+            this.Coins = 80000000;
             font = _content.Load<SpriteFont>("defaultFont");
             this.lettuceSprite = game.Content.Load<Texture2D>("Sprites/Lettuce-icon");
             this.lettuceSeedSprite = game.Content.Load<Texture2D>("seeds_lettuce");
@@ -83,7 +88,7 @@ namespace ThreadingInCsharp.States
             spriteBatch.End();
         }
 
-        void CreateInventory()
+        public void CreateInventory()
         {
             CropItem wheatItem = new CropItem(wheatSprite, new Vector2(-100, -100), 600, 0, "wheat", 600);
             SeedItem wheatSeed = new SeedItem(wheatSeedSprite, new Vector2(0, 0), 100, 0, "wheat");
@@ -102,6 +107,54 @@ namespace ThreadingInCsharp.States
             seeds.Add(wheatSeed);
             seeds.Add(lettuceSeed);
             seeds.Add(cornSeed);
+            var allTasks = new[]
+            {
+
+                Task.Factory.StartNew(() =>
+                {
+                    CropItem wheatItem = new CropItem(wheatSprite, new Vector2(-100, -100), 600, 0, "wheat", 600);
+                    Inventory.Add(wheatItem);
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                    SeedItem wheatSeed = new SeedItem(wheatSeedSprite, new Vector2(-100, -100), 100, 0, "wheat");
+                    seeds.Add(wheatSeed);
+                }),
+
+                Task.Factory.StartNew(() =>
+                {
+                    CropItem lettuceItem = new CropItem(lettuceSprite, new Vector2(-100, -100), 250, 0, "lettuce", 250);
+                    Inventory.Add(lettuceItem);
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                    SeedItem lettuceSeed = new SeedItem(lettuceSeedSprite, new Vector2(-100, -100), 50, 0, "lettuce");
+                    seeds.Add(lettuceSeed);
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                   CropItem cornItem = new CropItem(cornSprite, new Vector2(-100, -100), 75, 0, "corn", 50);
+                    Inventory.Add(cornItem);
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                   SeedItem cornSeed = new SeedItem(cornSeedSprite, new Vector2(-100, -100), 5, 0, "corn");
+                   seeds.Add(cornSeed);
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                   MeatItem cowItem = new MeatItem(cowSprite, new Vector2(-100, -100), 750, 0, "cow", 1150);
+                   Inventory.Add(cowItem);
+                }),
+                Task.Factory.StartNew(() =>
+                {
+                   MeatItem chickenItem = new MeatItem(chickenSprite, new Vector2(-100, -100), 300, 0, "chicken", 650);
+                   Inventory.Add(chickenItem);
+                }),
+
+        };
+
+            Task.WaitAll(allTasks); //blocks the current thread until all other tasks have completed execution
         }
 
         private void GenerateSlot(Vector2 position, IInventoryItem item)

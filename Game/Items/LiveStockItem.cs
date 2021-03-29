@@ -64,5 +64,13 @@ namespace ThreadingInCsharp.Game.Items
         {
             return 0;
         }
+
+        public void Grow()
+        {
+            if (this.count > 0)
+            {
+                this.count -= 1;
+            }
+        }
     }
 }

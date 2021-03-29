@@ -33,6 +33,8 @@ namespace ThreadingInCsharp.States
 
             //MediaPlayer.IsRepeating = true;
             //MediaPlayer.Play(song);
+            MediaPlayer.IsRepeating = true;
+           // MediaPlayer.Play(song);
 
             var newGameButton = new Button(buttonTexture, buttonFont, new Vector2(865, 350), 1)
             {

@@ -3,12 +3,17 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Text;
+using ThreadingInCsharp.States;
 
 namespace ThreadingInCsharp.Game.Livestocks
 {
     public abstract class LiveStock : Entity
     {
         string name;
+        public TimeSpan timeTillNextStage;
+        Random random;
+        int minGrowTime;
+        int maxGrowTime;
         private MouseState _currentMouse;
         private bool _isHovering;
         private MouseState _previousMouse;
@@ -26,6 +31,11 @@ namespace ThreadingInCsharp.Game.Livestocks
         public LiveStock(Texture2D texture, Vector2 position, string name, int frameCount) : base(texture, position, frameCount)
         {
             this.name = name;
+            this.random = new Random();
+            int secondsTillNextStage = random.Next(1, 10);
+            this.timeTillNextStage = TimeSpan.FromSeconds(secondsTillNextStage);
+            this.minGrowTime = 1;
+            this.maxGrowTime = 10;
         }
 
         public string GetName()
@@ -53,18 +63,32 @@ namespace ThreadingInCsharp.Game.Livestocks
 
         public override void Update(GameTime gameTime)
         {
+         
+            timeTillNextStage = timeTillNextStage.Subtract(gameTime.ElapsedGameTime);
+
+            if (timeTillNextStage.TotalMilliseconds < 0 && CurrentFrame < FrameCount - 1)
+            {
+                CurrentFrame++;
+                timeTillNextStage = TimeSpan.FromSeconds(random.Next(minGrowTime, maxGrowTime));
+            }
+
             Hover();
-
-
-            base.Update(gameTime);
         }
+
+        //public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        //{
+        //    DrawAnimation(spriteBatch);
+        //    Color colour = Color.White;
+        //    if (_isHovering)
+        //        colour = Color.Gray;
+        //    spriteBatch.Draw(Texture, Position, new Rectangle(CurrentFrame * FrameWidth, 0, FrameWidth, FrameHeight), colour);
+        //}
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            Color colour = Color.White;
-            if (_isHovering)
-                colour = Color.Gray;
-            spriteBatch.Draw(Texture, Position, new Rectangle(CurrentFrame * FrameWidth, 0, FrameWidth, FrameHeight), colour);
+            DrawAnimation(spriteBatch);
         }
+
+
     }
 }
