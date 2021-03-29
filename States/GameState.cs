@@ -296,22 +296,30 @@ namespace ThreadingInCsharp.States
         //add animals to game when you buy them
         public int AddAnimal(LiveStockItem animal)
         {
-            if (animal.GetName() == "cow")
+            if ((chickenCount + cowCount) < 9)
             {
-                Cow cow = new Cow(walkingCow, new Vector2(420, 200));
-                components.Add(cow);
-                cow.Click += Livestock_Click;
-                i++;
-                cowCount += 1;
-            }
-                if (animal.GetName() == "cow")
+                Random random = new Random();
+                int i = 1;
+                if (animal.GetName() == "chicken")
                 {
-                    Cow cow = new Cow(walkingCow, new Vector2(420, 200));
-                    components.Add(cow);
-                    cow.Click += Livestock_Click;
-                    i++;
-                    cowCount += 1;
+                    chickenCount++;
+                    float xPosition = random.Next(390, 540);
+                    float yPosition = random.Next(150, 350);
+
+                    this.liveStockThreadList[chickenCount] = new Thread(() =>
+                    {
+                        Chicken chick = new Chicken(walkingChicken, new Vector2(xPosition, yPosition));
+                        components.Add(chick);
+                        chick.Click += Livestock_Click;
+                    });
+                    this.liveStockThreadList[chickenCount].Start();
+                    //this.liveStockSemaphore.Wait();
+                    //this.liveStockSemaphore.Release();
                 }
+                //join  all threads in the main thread
+                this.liveStockThreadList[chickenCount].Join();
+            }
+            return chickenCount + cowCount;
         }
 
         void MouseMethod()
@@ -466,6 +474,18 @@ namespace ThreadingInCsharp.States
             _global.ChangeState(_global.menu);
         }
 
+        private void farmTile_Click(object sender, EventArgs e)
+        {
+            if (selectedSeed != null && ((FarmTile)sender).plantedSeed == null)
+            {
+                ((FarmTile)sender).addSeed(selectedSeed);
+            }
+            else if (((FarmTile)sender).plantedSeed != null)
+            {
+                ((FarmTile)sender).harvestCrop();
+            }
+        }
+
         //event clicker for harvesting animals
         private void Livestock_Click(object sender, EventArgs e)
         {
@@ -513,7 +533,7 @@ namespace ThreadingInCsharp.States
                 Thread.Sleep(3000); //Suspend the currHum(current thread) for 3 seconds
                 currSun = weather.randomSun();
                 this.timeTillNextWeatherUpdate = new TimeSpan(0, 0, 10);
-             
+
             }
         }
 
