@@ -12,7 +12,6 @@ namespace ThreadingInCsharp.Game.Livestocks
         private MouseState _currentMouse;
         private bool _isHovering;
         private MouseState _previousMouse;
-
         public event EventHandler Click;
         public Rectangle Rectangle
         {
@@ -26,6 +25,11 @@ namespace ThreadingInCsharp.Game.Livestocks
         public LiveStock(Texture2D texture, Vector2 position, string name, int frameCount) : base(texture, position, frameCount)
         {
             this.name = name;
+            this.random = new Random();
+            int secondsTillNextStage = random.Next(1, 10);
+            this.timeTillNextStage = TimeSpan.FromSeconds(secondsTillNextStage);
+            this.minGrowTime = 1;
+            this.maxGrowTime = 10;
         }
 
         public string GetName()

@@ -129,6 +129,7 @@
     <Content Include="Content\corn.png" />
     <Content Include="Content\cornCrop.png" />
     <Content Include="Content\cow.png" />
+    <Content Include="Content\cowgrow.png" />
     <Content Include="Content\dirt.png" />
     <Content Include="Content\Grass.png" />
     <Content Include="Content\itemCount.png" />
