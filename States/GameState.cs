@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+
 using System.Threading;
 using System.Threading.Tasks;
 using ThreadingInCsharp.Game;
@@ -299,29 +300,6 @@ namespace ThreadingInCsharp.States
         //add animals to game when you buy them
         public int AddAnimal(LiveStockItem animal)
         {
-            if ((chickenCount + cowCount) < 9)
-            {
-                Random random = new Random();
-                int i = 1;
-                if (animal.GetName() == "chicken")
-                {
-                    chickenCount++;
-                    float xPosition = random.Next(390, 540);
-                    float yPosition = random.Next(150, 350);
-
-                    this.liveStockThreadList[chickenCount] = new Thread(() =>
-                    {
-                        Chicken chick = new Chicken(walkingChicken, new Vector2(xPosition, yPosition));
-                        components.Add(chick);
-                        chick.Click += Livestock_Click;
-                    });
-                    this.liveStockThreadList[chickenCount].Start();
-                    //this.liveStockSemaphore.Wait();
-                    //this.liveStockSemaphore.Release();
-                }
-
-                //join  all threads in the main thread
-                this.liveStockThreadList[chickenCount].Join();
 
                 if (animal.GetName() == "cow")
                 {
@@ -331,22 +309,7 @@ namespace ThreadingInCsharp.States
                     i++;
                     cowCount += 1;
                 }
-            }
-            return chickenCount + cowCount;
-        }
 
-        //event clicker for crops
-        //important for adding crops to farmtile
-        private void farmTile_Click(object sender, EventArgs e)
-        {
-            if (selectedSeed != null && ((FarmTile)sender).plantedSeed == null)
-            {
-                ((FarmTile)sender).addSeed(selectedSeed);
-            }
-            else if (((FarmTile)sender).plantedSeed != null)
-            {
-                ((FarmTile)sender).harvestCrop();
-            }
         }
 
         void MouseMethod()
@@ -373,8 +336,9 @@ namespace ThreadingInCsharp.States
 
         public override void Update(GameTime gameTime)
         {
-            updateWeather(gameTime);
-            makeItRain(gameTime);
+            //Using TPL randomize weather conditions
+            Task.Factory.StartNew(() => updateWeather(gameTime));
+            Task.Factory.StartNew(() => makeItRain(gameTime));
 
             if (currRain)
             {
@@ -542,9 +506,12 @@ namespace ThreadingInCsharp.States
             if (this.timeTillNextWeatherUpdate < TimeSpan.Zero)
             {
                 currTemp = weather.randomTemp();
+                Thread.Sleep(3000); //Suspend the currTemp(current thread) for 3 seconds
                 currHum = weather.randomHumidity();
+                Thread.Sleep(3000); //Suspend the currHum(current thread) for 3 seconds
                 currSun = weather.randomSun();
                 this.timeTillNextWeatherUpdate = new TimeSpan(0, 0, 10);
+             
             }
         }
 
