@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ThreadingInCsharp.Game;
@@ -55,45 +54,28 @@ namespace ThreadingInCsharp.States
         public bool currRain;
         public int chickenCount;
         public int cowCount;
-        private Vector2 resize;
+        private Thread[] liveStockThreadList;
+        private SemaphoreSlim liveStockSemaphore;
 
         TimeSpan timeTillNextWeatherUpdate;
         TimeSpan timeTillNextRain;
 
         public GameState(Global game, GraphicsDevice graphicsDevice, ContentManager content, InventoryState inventory, MouseState mouseState, ShopState shop) : base(game, graphicsDevice, content)
         {
-          
-            this.resize = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
             this.chickenCount = 0;
             this.cowCount = 0;
-            font = _content.Load<SpriteFont>("defaultFont");
-
             this.chickenSprites = new List<Texture2D>();
             this.cowSprites = new List<Texture2D>();
-
+            this.liveStockThreadList = new Thread[5];
+            this.liveStockSemaphore = new SemaphoreSlim(3);
             this.mouseState = mouseState;
             this.inventory = inventory;
             this.shop = shop;
 
             this.weather = new Weather();
-
-            this.rainTexture = content.Load<Texture2D>("rain");
-            this.buttonTexture = content.Load<Texture2D>("Button");
-            buttonFont = content.Load<SpriteFont>("defaultFont");
-            this.farmTileTexture = content.Load<Texture2D>("dirt");
-            farm2 = content.Load<Texture2D>("Sprites/dirt2");
+            this.LoadGameStateAssets();
             farmTiles = new List<FarmTile>();
             Tiles = new List<FarmTile>();
-            slotTexture = content.Load<Texture2D>("ItemSlot");
-
-            //animal sprites
-            littleCow = content.Load<Texture2D>("cow");
-            walkingCow = content.Load<Texture2D>("Sprites/cow_walk_right");
-            littleChicken = content.Load<Texture2D>("chicken");
-            walkingChicken = content.Load<Texture2D>("Sprites/chicken_walk_left");
-            deadChicken = content.Load<Texture2D>("Sprites/deadChicken");
-
-            this.buttonSfx = content.Load<SoundEffect>("Sound/selectionClick");
             this.buttonSound = buttonSfx.CreateInstance();
 
             this.currHum = 40;
@@ -108,14 +90,14 @@ namespace ThreadingInCsharp.States
             this.rainSound.IsLooped = true;
             if (currRain == true)
             {
-               // rainSound.Play();
+                // rainSound.Play();
             }
             else
             {
-              //  rainSound.Stop();
+                rainSound.Stop();
             }
 
-            var farmTile01 = new FarmTile(farm2, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 2/3, 210), 1, content, this);//fencetile
+            var farmTile01 = new FarmTile(farm2, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 2 / 3, 210), 1, content, this);//fencetile
 
             for (int i = 0; i < 9; i++)
             {
@@ -238,10 +220,9 @@ namespace ThreadingInCsharp.States
         {
             Texture2D grass = _content.Load<Texture2D>("Grass");
 
-
             spriteBatch.Begin();
 
-            spriteBatch.Draw(grass, new Rectangle(0, 0,GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
+            spriteBatch.Draw(grass, new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
             DateTime dateTime = DateTime.Now;
             string time = dateTime.ToString("h:mm tt");
 
@@ -320,6 +301,8 @@ namespace ThreadingInCsharp.States
         //add animals to game when you buy them
         public void AddAnimal(LiveStockItem animal)
         {
+
+            Random random = new Random();
             int i = 1;
             if (animal.GetName() == "chicken")
             {
@@ -353,14 +336,12 @@ namespace ThreadingInCsharp.States
             if (selectedSeed != null && ((FarmTile)sender).plantedSeed == null)
             {
 
-                if (animal.GetName() == "cow")
-                {
-                    Cow cow = new Cow(walkingCow, new Vector2(420, 200));
-                    components.Add(cow);
-                    cow.Click += Livestock_Click;
-                    i++;
-                    cowCount += 1;
-                }
+                ((FarmTile)sender).addSeed(selectedSeed);
+            }
+            else if (((FarmTile)sender).plantedSeed != null)
+            {
+                ((FarmTile)sender).harvestCrop();
+            }
         }
 
         void MouseMethod()
@@ -387,9 +368,8 @@ namespace ThreadingInCsharp.States
 
         public override void Update(GameTime gameTime)
         {
-            //Using TPL randomize weather conditions
-            Task.Factory.StartNew(() => updateWeather(gameTime));
-            Task.Factory.StartNew(() => makeItRain(gameTime));
+            updateWeather(gameTime);
+            makeItRain(gameTime);
 
             if (currRain)
             {
@@ -412,84 +392,84 @@ namespace ThreadingInCsharp.States
             MouseMethod();
             PrepareSeed();
 
-            //animal's movement
-            for (int i = 0; i < components.Count; i++)
-            {
-                if (components[i].Texture == walkingChicken || components[i].Texture == walkingCow)
-                {
-                    int minChangTime = 10;
-                    int maxChangeTime = 500;
-                    int directionTimer;
+            ////animal's movement
+            //for (int i = 0; i < components.Count; i++)
+            //{
+            //    if (components[i].Texture == walkingChicken || components[i].Texture == walkingCow)
+            //    {
+            //        int minChangTime = 10;
+            //        int maxChangeTime = 500;
+            //        int directionTimer;
 
-                    directionTimer = random.Next(minChangTime, maxChangeTime);
-                    int nextIndex = random.Next(0, 5);
-                    int nextSpeed = random.Next(0, 6);
+            //        directionTimer = random.Next(minChangTime, maxChangeTime);
+            //        int nextIndex = random.Next(0, 5);
+            //        int nextSpeed = random.Next(0, 6);
 
-                    directionTimer -= gameTime.ElapsedGameTime.Milliseconds;
-                    int maxX = 540;
-                    int minX = 262;
+            //        directionTimer -= gameTime.ElapsedGameTime.Milliseconds;
+            //        int maxX = 540;
+            //        int minX = 262;
 
-                    int maxY = 265;
-                    int minY = 65;
+            //        int maxY = 265;
+            //        int minY = 65;
 
-                    Vector2 Pos = components[i].Position;
+            //        Vector2 Pos = components[i].Position;
 
-                    if (directionTimer <= 0)
-                    {
-                        switch (nextIndex)
-                        {
-                            case 1:
-                                Pos.X += nextSpeed;
-                                break;
-                            case 2:
-                                Pos.X -= nextSpeed;
-                                break;
-                            case 3:
-                                Pos.X += nextSpeed;
-                                break;
-                            case 4:
-                                Pos.X -= nextSpeed;
-                                break;
-                        }
-                        switch (nextIndex)
-                        {
-                            case 1:
-                                Pos.Y += nextSpeed;
-                                break;
-                            case 2:
-                                Pos.Y -= nextSpeed;
-                                break;
-                            case 3:
-                                Pos.Y -= nextSpeed;
-                                break;
-                            case 4:
-                                Pos.Y += nextSpeed;
-                                break;
-                        }
-                        components[i].Position = Pos;
-                    }
+            //        if (directionTimer <= 0)
+            //        {
+            //            switch (nextIndex)
+            //            {
+            //                case 1:
+            //                    Pos.X += nextSpeed;
+            //                    break;
+            //                case 2:
+            //                    Pos.X -= nextSpeed;
+            //                    break;
+            //                case 3:
+            //                    Pos.X += nextSpeed;
+            //                    break;
+            //                case 4:
+            //                    Pos.X -= nextSpeed;
+            //                    break;
+            //            }
+            //            switch (nextIndex)
+            //            {
+            //                case 1:
+            //                    Pos.Y += nextSpeed;
+            //                    break;
+            //                case 2:
+            //                    Pos.Y -= nextSpeed;
+            //                    break;
+            //                case 3:
+            //                    Pos.Y -= nextSpeed;
+            //                    break;
+            //                case 4:
+            //                    Pos.Y += nextSpeed;
+            //                    break;
+            //            }
+            //            components[i].Position = Pos;
+            //        }
 
-                    // Check for bounds
-                    if (Pos.X > maxX)
-                    {
-                        Pos.X = -2;
-                    }
-                    else if (Pos.X < minX)
-                    {
-                        Pos.X = +2;
-                    }
+            //        // Check for bounds
+            //        if (Pos.X > maxX)
+            //        {
+            //            Pos.X = -2;
+            //        }
+            //        else if (Pos.X < minX)
+            //        {
+            //            Pos.X = +2;
+            //        }
 
-                    if (Pos.Y > maxY)
-                    {
-                        Pos.Y = -2;
-                    }
-                    else if (Pos.Y < minY)
-                    {
-                        Pos.Y = +2;
-                    }
-                }
-            }
-            base.Update(gameTime);
+            //        if (Pos.Y > maxY)
+            //        {
+            //            Pos.Y = -2;
+            //        }
+            //        else if (Pos.Y < minY)
+            //        {
+            //            Pos.Y = +2;
+            //        }
+            //    }
+            //}
+            //StartThread(gameTime);
         }
 
         private void shopButton_Click(object sender, EventArgs e)
@@ -508,19 +488,6 @@ namespace ThreadingInCsharp.States
         {
             this.buttonSound.Play();
             _global.ChangeState(_global.menu);
-        }
-
-        //event clicker for crops
-        private void farmTile_Click(object sender, EventArgs e)
-        {
-            if (selectedSeed != null && ((FarmTile)sender).plantedSeed == null)
-            {
-                ((FarmTile)sender).addSeed(selectedSeed);
-            }
-            else if (((FarmTile)sender).plantedSeed != null)
-            {
-                ((FarmTile)sender).harvestCrop();
-            }
         }
 
         //event clicker for harvesting animals
@@ -568,12 +535,9 @@ namespace ThreadingInCsharp.States
             if (this.timeTillNextWeatherUpdate < TimeSpan.Zero)
             {
                 currTemp = weather.randomTemp();
-                Thread.Sleep(3000); //Suspend the currTemp(current thread) for 3 seconds
                 currHum = weather.randomHumidity();
-                Thread.Sleep(3000); //Suspend the currHum(current thread) for 3 seconds
                 currSun = weather.randomSun();
                 this.timeTillNextWeatherUpdate = new TimeSpan(0, 0, 10);
-             
             }
         }
 
@@ -592,5 +556,6 @@ namespace ThreadingInCsharp.States
         {
             //Implement an update if need arises later
         }
+
     }
 }

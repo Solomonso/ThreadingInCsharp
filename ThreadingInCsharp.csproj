@@ -196,6 +196,9 @@
     </PackageReference>
     <PackageReference Include="MonoGame.Framework.WindowsUniversal" Version="3.8.0.1641" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
+    <PackageReference Include="MonoGame.Framework.WindowsUniversal.9000">
+      <Version>3.8.9008</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\defaultFont.spritefont" />
