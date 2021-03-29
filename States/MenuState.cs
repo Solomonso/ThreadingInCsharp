@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
@@ -30,24 +31,25 @@ namespace ThreadingInCsharp.States
             this.buttonSfx = content.Load<SoundEffect>("Sound/selectionClick");
             this.buttonSound = buttonSfx.CreateInstance();
 
-            MediaPlayer.IsRepeating = true;
-            MediaPlayer.Play(song);
+            //MediaPlayer.IsRepeating = true;
+            //MediaPlayer.Play(song);
 
-            var newGameButton = new Button(buttonTexture, buttonFont, new Vector2(300, 200), 1)
+
+            var newGameButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 1 / 6, 950), 1)
             {
                 Text = "Play Game",
             };
 
             newGameButton.Click += NewGameButton_Click;
 
-            var settingsButton = new Button(buttonTexture, buttonFont, new Vector2(300, 250), 1)
+            var settingsButton = new Button(buttonTexture, buttonFont, new Vector2(900, 950), 1)
             {
                 Text = "Settings",
             };
 
             settingsButton.Click += SettingsButton_Click;
 
-            var quitGameButton = new Button(buttonTexture, buttonFont, new Vector2(300, 300), 1)
+            var quitGameButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 4/5, 950), 1)
             {
                 Text = "Quit Game",
             };
@@ -58,15 +60,15 @@ namespace ThreadingInCsharp.States
             {
                 newGameButton,
                 settingsButton,
-                quitGameButton,
+                quitGameButton
             };
+            
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(background, new Rectangle(0, 0, 800, 500), Color.White);
-
+            spriteBatch.Draw(background, new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
             foreach (var component in components)
                 component.Draw(gameTime, spriteBatch);
 

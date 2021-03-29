@@ -2,14 +2,13 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using ThreadingInCsharp.States;
 
 namespace ThreadingInCsharp
 {
     public class Global : Microsoft.Xna.Framework.Game
     {
+        public Vector2 resize = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         public InventoryState inventory;
@@ -62,12 +61,21 @@ namespace ThreadingInCsharp
             }
             currentState.Update(gameTime);
             currentState.PostUpdate(gameTime);
-            base.Update(gameTime);
+           base.Update(gameTime);
+        }
+
+        public void _Resize()
+        {
+            graphics.IsFullScreen = true;
+            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            graphics.ApplyChanges();
         }
 
         protected override void Update(GameTime gameTime)
         {
             _ChangeState(gameTime);
+            _Resize();
         }
 
         protected override void Draw(GameTime gameTime)

@@ -12,6 +12,8 @@ namespace ThreadingInCsharp.Game.Controls
 
         private MouseState _currentMouse;
 
+        private Rectangle mouseRectangle;
+
         private SpriteFont _font;
 
         private bool _isHovering;
@@ -60,14 +62,22 @@ namespace ThreadingInCsharp.Game.Controls
 
                 spriteBatch.DrawString(_font, Text, new Vector2(x, y), PenColour);
             }
+
+            
+            spriteBatch.Draw(Texture, mouseRectangle, colour);
+            
         }
 
         public override void Update(GameTime gameTime)
         {
+             //   mouse = new MouseControle(((Game1)Game).setscreen.width,
+          //  ((Game1)Game).setscreen.height,
+           // ((Game1)Game).Window.Handle);
+          //  Mouse.WindowHandle = 
             _previousMouse = _currentMouse;
             _currentMouse = Mouse.GetState();
 
-            var mouseRectangle = new Rectangle(_currentMouse.X, _currentMouse.Y, 1, 1);
+            mouseRectangle = new Rectangle(_currentMouse.X, _currentMouse.Y, 10, 10);
 
             _isHovering = false;
 

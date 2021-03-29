@@ -55,12 +55,15 @@ namespace ThreadingInCsharp.States
         public bool currRain;
         public int chickenCount;
         public int cowCount;
+        private Vector2 resize;
 
         TimeSpan timeTillNextWeatherUpdate;
         TimeSpan timeTillNextRain;
 
         public GameState(Global game, GraphicsDevice graphicsDevice, ContentManager content, InventoryState inventory, MouseState mouseState, ShopState shop) : base(game, graphicsDevice, content)
         {
+          
+            this.resize = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
             this.chickenCount = 0;
             this.cowCount = 0;
             font = _content.Load<SpriteFont>("defaultFont");
@@ -105,14 +108,14 @@ namespace ThreadingInCsharp.States
             this.rainSound.IsLooped = true;
             if (currRain == true)
             {
-                rainSound.Play();
+               // rainSound.Play();
             }
             else
             {
-                rainSound.Stop();
+              //  rainSound.Stop();
             }
 
-            var farmTile01 = new FarmTile(farm2, new Vector2(400, 100), 1, content, this);//fencetile
+            var farmTile01 = new FarmTile(farm2, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 2/3, 210), 1, content, this);//fencetile
 
             for (int i = 0; i < 9; i++)
             {
@@ -141,21 +144,21 @@ namespace ThreadingInCsharp.States
             }
 
 
-            var menuButton = new Button(buttonTexture, buttonFont, new Vector2(5, 435), 1)
+            var menuButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 1 / 6, 950), 1)
             {
                 Text = "Menu",
             };
 
             menuButton.Click += menuButton_Click;
 
-            var inventoryButton = new Button(buttonTexture, buttonFont, new Vector2(320, 435), 1)
+            var inventoryButton = new Button(buttonTexture, buttonFont, new Vector2(900, 950), 1)
             {
                 Text = "Inventory",
             };
 
             inventoryButton.Click += inventoryButton_Click;
 
-            var shopButton = new Button(buttonTexture, buttonFont, new Vector2(635, 435), 1)
+            var shopButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 4 / 5, 950), 1)
             {
                 Text = "Shop",
             };
@@ -217,14 +220,14 @@ namespace ThreadingInCsharp.States
 
             spriteBatch.Begin();
 
-            spriteBatch.Draw(grass, new Rectangle(0, 0, 800, 500), Color.White);
+            spriteBatch.Draw(grass, new Rectangle(0, 0,GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
             DateTime dateTime = DateTime.Now;
             string time = dateTime.ToString("h:mm tt");
 
             if (DayAndNight() == true)
             {
                 //nightTime
-                spriteBatch.Draw(grass, new Rectangle(0, 0, 800, 500), new Color(50, 50, 125));
+                spriteBatch.Draw(grass, new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), new Color(50, 50, 125));
                 spriteBatch.DrawString(font, "Time: " + time, new Vector2(640, 15), Color.White);
             }
 
@@ -235,7 +238,7 @@ namespace ThreadingInCsharp.States
 
             if (currRain == true)
             {
-                spriteBatch.Draw(rainTexture, new Rectangle(0, 0, 800, 500), Color.White * 0.7f);
+                spriteBatch.Draw(rainTexture, new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White * 0.7f);
             }
 
             foreach (var component in components)

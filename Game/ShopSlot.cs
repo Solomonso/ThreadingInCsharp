@@ -33,7 +33,7 @@ namespace ThreadingInCsharp.Game
 
             var buttonFont = content.Load<SpriteFont>("defaultFont");
 
-            buyButton = new Button(buttonTexture, buttonFont, this.Position + new Vector2(-35, 120), frameCount)
+            buyButton = new Button(buttonTexture, buttonFont, this.Position + new Vector2(525, 470), frameCount)
             {
                 Text = "-" + this.item.GetPrice().ToString() + " coins"
             };
@@ -75,8 +75,9 @@ namespace ThreadingInCsharp.Game
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(slotTexture, Position + new Vector2(-10, -11), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(item.GetTexture(), Position, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            //add 550, 350 to the items of the shop
+            spriteBatch.Draw(slotTexture, Position + new Vector2(540,340), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(item.GetTexture(), Position + new Vector2(550, 350), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             buyButton.Draw(gameTime, spriteBatch);
         }
 
