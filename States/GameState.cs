@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using ThreadingInCsharp.Game;
 using ThreadingInCsharp.Game.Controls;
 using ThreadingInCsharp.Game.Crops;
@@ -295,24 +297,23 @@ namespace ThreadingInCsharp.States
         public void AddAnimal(LiveStockItem animal)
         {
             int i = 1;
-            if (animal.GetName() == "chicken")
-            {
-                Chicken chick = new Chicken(walkingChicken, new Vector2(500, 220));
-                components.Add(chick);
-                chick.Click += Livestock_Click;
-                i++;
-                chickenCount++;
-            }
+               if (animal.GetName() == "chicken")
+                {
+                    Chicken chick = new Chicken(walkingChicken, new Vector2(500, 220));
+                    components.Add(chick);
+                    chick.Click += Livestock_Click;
+                    i++;
+                    chickenCount++;
+                }
 
-            if (animal.GetName() == "cow")
-            {
-
-                Cow cow = new Cow(walkingCow, new Vector2(420, 200));
-                components.Add(cow);
-                cow.Click += Livestock_Click;
-                i++;
-                cowCount += 1;
-            }
+                if (animal.GetName() == "cow")
+                {
+                    Cow cow = new Cow(walkingCow, new Vector2(420, 200));
+                    components.Add(cow);
+                    cow.Click += Livestock_Click;
+                    i++;
+                    cowCount += 1;
+                }
         }
 
         void MouseMethod()
@@ -339,8 +340,9 @@ namespace ThreadingInCsharp.States
 
         public override void Update(GameTime gameTime)
         {
-            updateWeather(gameTime);
-            makeItRain(gameTime);
+            //Using TPL randomize weather conditions
+            Task.Factory.StartNew(() => updateWeather(gameTime));
+            Task.Factory.StartNew(() => makeItRain(gameTime));
 
             if (currRain)
             {
@@ -511,9 +513,12 @@ namespace ThreadingInCsharp.States
             if (this.timeTillNextWeatherUpdate < TimeSpan.Zero)
             {
                 currTemp = weather.randomTemp();
+                Thread.Sleep(3000); //Suspend the currTemp(current thread) for 3 seconds
                 currHum = weather.randomHumidity();
+                Thread.Sleep(3000); //Suspend the currHum(current thread) for 3 seconds
                 currSun = weather.randomSun();
                 this.timeTillNextWeatherUpdate = new TimeSpan(0, 0, 10);
+             
             }
         }
 
