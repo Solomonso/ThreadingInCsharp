@@ -3,8 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Text;
-using System.Threading;
-using ThreadingInCsharp.States;
 
 namespace ThreadingInCsharp.Game.Livestocks
 {
@@ -14,7 +12,6 @@ namespace ThreadingInCsharp.Game.Livestocks
         private MouseState _currentMouse;
         private bool _isHovering;
         private MouseState _previousMouse;
-        private SemaphoreSlim liveStockSemaphore;
 
         public event EventHandler Click;
         public Rectangle Rectangle
@@ -29,12 +26,6 @@ namespace ThreadingInCsharp.Game.Livestocks
         public LiveStock(Texture2D texture, Vector2 position, string name, int frameCount) : base(texture, position, frameCount)
         {
             this.name = name;
-            this.random = new Random();
-            int secondsTillNextStage = random.Next(1, 10);
-            this.timeTillNextStage = TimeSpan.FromSeconds(secondsTillNextStage);
-            this.minGrowTime = 1;
-            this.maxGrowTime = 10;
-            this.liveStockSemaphore = new SemaphoreSlim(3);
         }
 
         public string GetName()
@@ -62,14 +53,10 @@ namespace ThreadingInCsharp.Game.Livestocks
 
         public override void Update(GameTime gameTime)
         {
-            timeTillNextStage = timeTillNextStage.Subtract(gameTime.ElapsedGameTime);
-
-            if (timeTillNextStage.TotalMilliseconds < 0 && CurrentFrame < FrameCount - 1)
-            {
-                CurrentFrame++;
-                timeTillNextStage = TimeSpan.FromSeconds(random.Next(minGrowTime, maxGrowTime));
-            }
             Hover();
+
+
+            base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

@@ -3,8 +3,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using ThreadingInCsharp.Game.Crops;
 using ThreadingInCsharp.Game.Items;
 using ThreadingInCsharp.States;
@@ -76,6 +74,7 @@ namespace ThreadingInCsharp.Game.Map
             {
                 plantedSeed.Draw(gameTime, spriteBatch);
                 spriteBatch.DrawString(font, plantedSeed.timeTillNextStage.TotalSeconds.ToString(), plantedSeed.Position, Color.White);
+
             }
 
         }
@@ -112,31 +111,26 @@ namespace ThreadingInCsharp.Game.Map
 
         public void addSeed(SeedItem seed)
         {
-      
-                if (seed.GetCount() > 0 && plantedSeed == null)
+            if (seed.GetCount() > 0 && plantedSeed == null)
+            {
+                switch (seed.GetName())
                 {
-                    switch (seed.GetName())
-                    {
-                        case "corn":
-                            plantedSeed = new Corn(content, Position, this, game);
-                            seed.Plant();
-                            break;
-                        case "lettuce":
-                            Thread thread = new Thread(() =>
-                            {
-                                plantedSeed = new Lettuce(content, Position, this, game);
-                                seed.Plant();
-                            });
-                            thread.Start();
-                            break;
-                        case "wheat":
-                            plantedSeed = new Wheat(content, Position, this, game);
-                            seed.Plant();
-                            break;
-                        default:
-                            break;
-                    }
+                    case "corn":
+                        plantedSeed = new Corn(content, Position, this, game);
+                        seed.Plant();
+                        break;
+                    case "lettuce":
+                        plantedSeed = new Lettuce(content, Position, this, game);
+                        seed.Plant();
+                        break;
+                    case "wheat":
+                        plantedSeed = new Wheat(content, Position, this, game);
+                        seed.Plant();
+                        break;
+                    default:
+                        break;
                 }
+            }
         }
 
         public void removeCrop()

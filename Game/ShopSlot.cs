@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading;
 using ThreadingInCsharp.Game.Controls;
 using ThreadingInCsharp.Game.interfaces;
 using ThreadingInCsharp.States;
@@ -19,7 +18,7 @@ namespace ThreadingInCsharp.Game
         ShopState shop;
         Texture2D slotTexture;
         Texture2D seedTexture;
-        private SemaphoreSlim liveStockSemaphore;
+
         public ShopSlot(ContentManager content, Vector2 position, IInventoryItem item, int frameCount, float scale, InventoryState inv, ShopState shop) : base(item.GetTexture(), position, 1)
         {
             this.shop = shop;
@@ -31,7 +30,6 @@ namespace ThreadingInCsharp.Game
             Texture2D buttonTexture = content.Load<Texture2D>("Button");
             slotTexture = content.Load<Texture2D>("ItemSlot");
             seedTexture = content.Load<Texture2D>("seeds");
-            this.liveStockSemaphore = new SemaphoreSlim(3);
 
             var buttonFont = content.Load<SpriteFont>("defaultFont");
 
@@ -55,19 +53,17 @@ namespace ThreadingInCsharp.Game
                             inventory.Coins -= inventory.seeds[i].GetPrice();
                         }
                 }
-                else if(this.item.GetName() == "chicken")
+                else if (this.item.GetName() == "chicken")
                 {
                     shop.addItem(item);
                     inventory.Coins -= item.GetPrice();
                 }
-                else if(this.item.GetName() == "cow")
+                else if (this.item.GetName() == "cow")
                 {
-                   
                     shop.addItem(item);
                     inventory.Coins -= item.GetPrice();
-                    
                 }
-                else if(this.item.GetName() == "farmslot" && this.item.GetCount() < 1)
+                else if (this.item.GetName() == "farmslot" && this.item.GetCount() < 1)
                 {
                     shop.PrepareLand(item);
                     this.item.SetCount();

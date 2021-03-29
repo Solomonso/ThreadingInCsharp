@@ -2,10 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using ThreadingInCsharp.States;
 
 namespace ThreadingInCsharp
@@ -24,12 +20,6 @@ namespace ThreadingInCsharp
         private State currentState;
         private State nextState;
 
-        public Thread shopStateThread;
-        public Thread menuStateThread;
-        public Thread settingStateThread;
-        public Thread gameStateThread;
-        public Thread inventoryStateThread;
-
         public void ChangeState(State state)
         {
             nextState = state;
@@ -43,20 +33,17 @@ namespace ThreadingInCsharp
 
         protected override void Initialize()
         {
-                mouseState = Mouse.GetState();
-                inventory = new InventoryState(this, graphics.GraphicsDevice, Content);
 
-                shop = new ShopState(this, graphics.GraphicsDevice, Content, inventory);
-
-                menu = new MenuState(this, graphics.GraphicsDevice, Content);
-
-                setting = new SettingState(this, graphics.GraphicsDevice, Content);
-                Game = new GameState(this, graphics.GraphicsDevice, Content, inventory, mouseState, shop);
-
+            mouseState = Mouse.GetState();
+            inventory = new InventoryState(this, graphics.GraphicsDevice, Content);
+            shop = new ShopState(this, graphics.GraphicsDevice, Content, inventory);
+            menu = new MenuState(this, graphics.GraphicsDevice, Content);
+            setting = new SettingState(this, graphics.GraphicsDevice, Content);
+            Game = new GameState(this, graphics.GraphicsDevice, Content, inventory, mouseState, shop);
             IsMouseVisible = true;
-                IsFixedTimeStep = true;
-                TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
-                base.Initialize();
+            IsFixedTimeStep = true;
+            TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
+            base.Initialize();
         }
 
         protected override void LoadContent()
