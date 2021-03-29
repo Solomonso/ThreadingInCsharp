@@ -53,15 +53,9 @@ namespace ThreadingInCsharp.Game
                             inventory.Coins -= inventory.seeds[i].GetPrice();
                         }
                 }
-                else if (this.item.GetName() == "chicken")
+                else if (this.item.GetName() == "chicken" || this.item.GetName() == "cow")
                 {
                     shop.addItem(item);
-                    inventory.Coins -= item.GetPrice();
-                }
-                else if (this.item.GetName() == "cow")
-                {
-                    shop.addItem(item);
-                    inventory.Coins -= item.GetPrice();
                 }
                 else if (this.item.GetName() == "farmslot" && this.item.GetCount() < 1)
                 {

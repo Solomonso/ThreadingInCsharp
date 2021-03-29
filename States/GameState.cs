@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ThreadingInCsharp.Game;
@@ -57,12 +56,15 @@ namespace ThreadingInCsharp.States
         public int cowCount;
         private Vector2 resize;
 
+        private Thread[] liveStockThreadList;
+        private SemaphoreSlim liveStockSemaphore;
+
         TimeSpan timeTillNextWeatherUpdate;
         TimeSpan timeTillNextRain;
 
         public GameState(Global game, GraphicsDevice graphicsDevice, ContentManager content, InventoryState inventory, MouseState mouseState, ShopState shop) : base(game, graphicsDevice, content)
         {
-          
+
             this.resize = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
             this.chickenCount = 0;
             this.cowCount = 0;
@@ -70,7 +72,9 @@ namespace ThreadingInCsharp.States
 
             this.chickenSprites = new List<Texture2D>();
             this.cowSprites = new List<Texture2D>();
-
+            //Here we can set the number of live stocks possible
+            this.liveStockThreadList = new Thread[10];
+            this.liveStockSemaphore = new SemaphoreSlim(3);
             this.mouseState = mouseState;
             this.inventory = inventory;
             this.shop = shop;
@@ -90,7 +94,7 @@ namespace ThreadingInCsharp.States
             littleCow = content.Load<Texture2D>("cow");
             walkingCow = content.Load<Texture2D>("Sprites/cow_walk_right");
             littleChicken = content.Load<Texture2D>("chicken");
-            walkingChicken = content.Load<Texture2D>("Sprites/chicken_walk_left");
+            walkingChicken = content.Load<Texture2D>("chickGrow2");
             deadChicken = content.Load<Texture2D>("Sprites/deadChicken");
 
             this.buttonSfx = content.Load<SoundEffect>("Sound/selectionClick");
@@ -108,21 +112,20 @@ namespace ThreadingInCsharp.States
             this.rainSound.IsLooped = true;
             if (currRain == true)
             {
-               // rainSound.Play();
+                // rainSound.Play();
             }
             else
             {
               //  rainSound.Stop();
             }
 
-            var farmTile01 = new FarmTile(farm2, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 2/3, 210), 1, content, this);//fencetile
+            var farmTile01 = new FarmTile(farm2, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 2 / 3, 210), 1, content, this);//fencetile
 
             for (int i = 0; i < 9; i++)
             {
                 farmTiles.Add(new FarmTile(farmTileTexture, new Vector2(-100, -100), 1, content, this));
                 Tiles.Add(new FarmTile(farmTileTexture, new Vector2(-100, -100), 1, content, this));
             }
-
 
             for (int i = 0; i < (int)Math.Ceiling(((float)farmTiles.Count / 3)); i++)
             {
@@ -136,13 +139,11 @@ namespace ThreadingInCsharp.States
                 }
             }
 
-
             for (int i = 0; i < 9; i++)
             {
                 chickenSprites.Add(littleChicken);
                 cowSprites.Add(littleCow);
             }
-
 
             var menuButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 1 / 6, 950), 1)
             {
@@ -217,10 +218,9 @@ namespace ThreadingInCsharp.States
         {
             Texture2D grass = _content.Load<Texture2D>("Grass");
 
-
             spriteBatch.Begin();
 
-            spriteBatch.Draw(grass, new Rectangle(0, 0,GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
+            spriteBatch.Draw(grass, new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
             DateTime dateTime = DateTime.Now;
             string time = dateTime.ToString("h:mm tt");
 
@@ -228,13 +228,11 @@ namespace ThreadingInCsharp.States
             {
                 //nightTime
                 spriteBatch.Draw(grass, new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), new Color(50, 50, 125));
-                spriteBatch.DrawString(font, "Time: " + time, new Vector2(640, 15), Color.White);
+                spriteBatch.DrawString(font, "Time : " + time, new Vector2(1750, 15), Color.White);
             }
-
 
             if (this.selectedSeed != null)
                 spriteBatch.Draw(selectedSeed.GetTexture(), new Vector2(200, 20), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
-
 
             if (currRain == true)
             {
@@ -244,18 +242,17 @@ namespace ThreadingInCsharp.States
             foreach (var component in components)
                 component.Draw(gameTime, spriteBatch);
 
-            spriteBatch.DrawString(font, "Time: " + time, new Vector2(640, 15), Color.White);
+            spriteBatch.DrawString(font, "Time : " + time, new Vector2(1750, 15), Color.White);
+            spriteBatch.DrawString(font, "Temperature : " + currTemp.ToString(), new Vector2(1750, 35), Color.White);
+            spriteBatch.DrawString(font, "Humidity : " + currHum.ToString(), new Vector2(1750, 55), Color.White);
+            spriteBatch.DrawString(font, "Sunshine : " + currSun.ToString(), new Vector2(1750, 75), Color.White);
 
-            spriteBatch.DrawString(font, "Temperature:" + currTemp.ToString(), new Vector2(640, 35), Color.White);
-            spriteBatch.DrawString(font, "Humidity:" + currHum.ToString(), new Vector2(640, 55), Color.White);
-            spriteBatch.DrawString(font, "Sunshine:" + currSun.ToString(), new Vector2(640, 75), Color.White);
+            spriteBatch.Draw(littleChicken, new Vector2(600, 5), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(littleCow, new Vector2(600, 30), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
 
-            spriteBatch.Draw(littleChicken, new Vector2(280, 5), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
-            spriteBatch.Draw(littleCow, new Vector2(280, 30), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
-
-            spriteBatch.Draw(slotTexture, new Vector2(195, 15), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(font, "X " + chickenCount, new Vector2(320, 15), Color.White);
-            spriteBatch.DrawString(font, "X " + cowCount, new Vector2(320, 40), Color.White);
+            spriteBatch.Draw(slotTexture, new Vector2(500, 15), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(font, "X " + chickenCount, new Vector2(650, 17), Color.White);
+            spriteBatch.DrawString(font, "X " + cowCount, new Vector2(650, 43), Color.White);
 
             if (this.selectedSeed != null)
             {
@@ -297,18 +294,16 @@ namespace ThreadingInCsharp.States
         }
 
         //add animals to game when you buy them
-        public void AddAnimal(LiveStockItem animal)
+        public int AddAnimal(LiveStockItem animal)
         {
-            int i = 1;
-               if (animal.GetName() == "chicken")
-                {
-                    Chicken chick = new Chicken(walkingChicken, new Vector2(500, 220));
-                    components.Add(chick);
-                    chick.Click += Livestock_Click;
-                    i++;
-                    chickenCount++;
-                }
-
+            if (animal.GetName() == "cow")
+            {
+                Cow cow = new Cow(walkingCow, new Vector2(420, 200));
+                components.Add(cow);
+                cow.Click += Livestock_Click;
+                i++;
+                cowCount += 1;
+            }
                 if (animal.GetName() == "cow")
                 {
                     Cow cow = new Cow(walkingCow, new Vector2(420, 200));
@@ -364,88 +359,93 @@ namespace ThreadingInCsharp.States
                     components.RemoveAt(i);
                 }
             }
+            Task.Factory.StartNew(() => MouseMethod());
+            Task.Factory.StartNew(() => PrepareSeed());
 
-            MouseMethod();
-            PrepareSeed();
+            ////animal's movement
+            //for (int i = 0; i < components.Count; i++)
+            //{
+            //    if (components[i].Texture == walkingChicken || components[i].Texture == walkingCow)
+            //    {
+            //        int minChangTime = 10;
+            //        int maxChangeTime = 500;
+            //        int directionTimer;
 
-            //animal's movement
-            for (int i = 0; i < components.Count; i++)
-            {
-                if (components[i].Texture == walkingChicken || components[i].Texture == walkingCow)
-                {
-                    int minChangTime = 10;
-                    int maxChangeTime = 500;
-                    int directionTimer;
+            //        directionTimer = random.Next(minChangTime, maxChangeTime);
+            //        int nextIndex = random.Next(0, 5);
+            //        int nextSpeed = random.Next(0, 6);
 
-                    directionTimer = random.Next(minChangTime, maxChangeTime);
-                    int nextIndex = random.Next(0, 5);
-                    int nextSpeed = random.Next(0, 6);
+            //        directionTimer -= gameTime.ElapsedGameTime.Milliseconds;
+            //        int maxX = 540;
+            //        int minX = 262;
 
-                    directionTimer -= gameTime.ElapsedGameTime.Milliseconds;
-                    int maxX = 540;
-                    int minX = 262;
+            //        int maxY = 265;
+            //        int minY = 65;
 
-                    int maxY = 265;
-                    int minY = 65;
+            //        Vector2 Pos = components[i].Position;
 
-                    Vector2 Pos = components[i].Position;
+            //        if (directionTimer <= 0)
+            //        {
+            //            switch (nextIndex)
+            //            {
+            //                case 1:
+            //                    Pos.X += nextSpeed;
+            //                    break;
+            //                case 2:
+            //                    Pos.X -= nextSpeed;
+            //                    break;
+            //                case 3:
+            //                    Pos.X += nextSpeed;
+            //                    break;
+            //                case 4:
+            //                    Pos.X -= nextSpeed;
+            //                    break;
+            //            }
+            //            switch (nextIndex)
+            //            {
+            //                case 1:
+            //                    Pos.Y += nextSpeed;
+            //                    break;
+            //                case 2:
+            //                    Pos.Y -= nextSpeed;
+            //                    break;
+            //                case 3:
+            //                    Pos.Y -= nextSpeed;
+            //                    break;
+            //                case 4:
+            //                    Pos.Y += nextSpeed;
+            //                    break;
+            //            }
+            //            components[i].Position = Pos;
+            //        }
 
-                    if (directionTimer <= 0)
-                    {
-                        switch (nextIndex)
-                        {
-                            case 1:
-                                Pos.X += nextSpeed;
-                                break;
-                            case 2:
-                                Pos.X -= nextSpeed;
-                                break;
-                            case 3:
-                                Pos.X += nextSpeed;
-                                break;
-                            case 4:
-                                Pos.X -= nextSpeed;
-                                break;
-                        }
-                        switch (nextIndex)
-                        {
-                            case 1:
-                                Pos.Y += nextSpeed;
-                                break;
-                            case 2:
-                                Pos.Y -= nextSpeed;
-                                break;
-                            case 3:
-                                Pos.Y -= nextSpeed;
-                                break;
-                            case 4:
-                                Pos.Y += nextSpeed;
-                                break;
-                        }
-                        components[i].Position = Pos;
-                    }
+            //        // Check for bounds
+            //        if (Pos.X > maxX)
+            //        {
+            //            Pos.X = -2;
+            //        }
+            //        else if (Pos.X < minX)
+            //        {
+            //            Pos.X = +2;
+            //        }
 
-                    // Check for bounds
-                    if (Pos.X > maxX)
-                    {
-                        Pos.X = -2;
-                    }
-                    else if (Pos.X < minX)
-                    {
-                        Pos.X = +2;
-                    }
+            //        if (Pos.Y > maxY)
+            //        {
+            //            Pos.Y = -2;
+            //        }
+            //        else if (Pos.Y < minY)
+            //        {
+            //            Pos.Y = +2;
+            //        }
+            //    }
+            //}
+            //StartThread(gameTime);
+        }
 
-                    if (Pos.Y > maxY)
-                    {
-                        Pos.Y = -2;
-                    }
-                    else if (Pos.Y < minY)
-                    {
-                        Pos.Y = +2;
-                    }
-                }
-            }
-            base.Update(gameTime);
+        private void StartThread(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            Thread t1 = new Thread(() => base.Update(gameTime));
+            t1.Start();
         }
 
         private void shopButton_Click(object sender, EventArgs e)
@@ -466,22 +466,11 @@ namespace ThreadingInCsharp.States
             _global.ChangeState(_global.menu);
         }
 
-        //event clicker for crops
-        private void farmTile_Click(object sender, EventArgs e)
-        {
-            if (selectedSeed != null && ((FarmTile)sender).plantedSeed == null)
-            {
-                ((FarmTile)sender).addSeed(selectedSeed);
-            }
-            else if (((FarmTile)sender).plantedSeed != null)
-            {
-                ((FarmTile)sender).harvestCrop();
-            }
-        }
-
         //event clicker for harvesting animals
         private void Livestock_Click(object sender, EventArgs e)
         {
+
+
             if (((LiveStock)sender).GetName() == "cow")
             {
                 this.cowCount -= 1;
@@ -496,12 +485,15 @@ namespace ThreadingInCsharp.States
             }
             else if (((LiveStock)sender).GetName() == "chicken")
             {
+                //this.liveStockThreadList[0].Join();
                 this.chickenCount -= 1;
+
                 for (int i = 0; i < inventory.Inventory.Count; i++)
                 {
                     if ("chicken" == inventory.Inventory[i].GetName())
                     {
                         inventory.Inventory[i].SetCount();
+
                     }
                 }
                 ((Entity)sender).Texture = deadChicken;
@@ -540,5 +532,6 @@ namespace ThreadingInCsharp.States
         {
             //Implement an update if need arises later
         }
+
     }
 }

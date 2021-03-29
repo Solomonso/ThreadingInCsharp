@@ -2,6 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading;
 using ThreadingInCsharp.States;
 
 namespace ThreadingInCsharp
@@ -19,7 +22,6 @@ namespace ThreadingInCsharp
         MouseState mouseState;
         private State currentState;
         private State nextState;
-
         public void ChangeState(State state)
         {
             nextState = state;

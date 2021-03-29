@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using ThreadingInCsharp.Game;
 
 namespace ThreadingInCsharp.States
@@ -12,9 +10,7 @@ namespace ThreadingInCsharp.States
     {
         protected List<Entity> components;
         protected ContentManager _content;
-
         protected Global _global;
-
         protected GraphicsDevice _graphicsDevice;
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -43,9 +39,7 @@ namespace ThreadingInCsharp.States
             {
                 component.Update(gameTime);
             }
-            
-        }
 
-       
+        }
     }
 }
