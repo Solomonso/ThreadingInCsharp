@@ -74,6 +74,8 @@ namespace ThreadingInCsharp
 
         protected override void Update(GameTime gameTime)
         {
+
+            IsFixedTimeStep = false;
             _ChangeState(gameTime);
             _Resize();
         }
