@@ -68,44 +68,27 @@ namespace ThreadingInCsharp.States
             components.Add(newSlot);
         }
 
-        public void CreateInvList()
+        public async Task CreateInvList()
         {
-            var allTasks = new[]
-           {
 
-                Task.Factory.StartNew(() =>
-                {
-                    SeedItem wheatSeed = new SeedItem(_content.Load<Texture2D>("seeds_wheat"), new Vector2(-100, -100), 100, 0, "wheat");
-                    this.invList.Add(wheatSeed);
-                }),
-                Task.Factory.StartNew(() =>
-                {
-                   SeedItem lettuceSeed = new SeedItem(_content.Load<Texture2D>("seeds_lettuce"), new Vector2(-100, -100), 50, 0, "lettuce");
-                   this.invList.Add(lettuceSeed);
-                }),
-                Task.Factory.StartNew(() =>
-                {
-                   SeedItem cornSeed = new SeedItem(_content.Load<Texture2D>("seeds_corn"), new Vector2(-100, -100), 5, 0, "corn");
-                   this.invList.Add(cornSeed);
-                }),
-                Task.Factory.StartNew(() =>
-                {
-                   LiveStockItem cowItem = new LiveStockItem(_content.Load<Texture2D>("cow"), new Vector2(-100, -100), 750, 0, "cow");
-                   this.invList.Add(cowItem);
-                }),
-                Task.Factory.StartNew(() =>
-                {
-                   LiveStockItem chickenItem = new LiveStockItem(_content.Load<Texture2D>("chicken"), new Vector2(-100, -100), 300, 0, "chicken");
-                   this.invList.Add(chickenItem);
-                }),
-                Task.Factory.StartNew(() =>
-                {
-                   TileItem tileItem = new TileItem(_content.Load<Texture2D>("Sprites/land"), new Vector2(), 10000, 0, "farmslot");
-                   this.invList.Add(tileItem);
-                }),
-             };
+            SeedItem wheatSeed = new SeedItem(_content.Load<Texture2D>("seeds_wheat"), new Vector2(-100, -100), 100, 0, "wheat");
+            SeedItem lettuceSeed = new SeedItem(_content.Load<Texture2D>("seeds_lettuce"), new Vector2(-100, -100), 50, 0, "lettuce");
+            SeedItem cornSeed = new SeedItem(_content.Load<Texture2D>("seeds_corn"), new Vector2(-100, -100), 5, 0, "corn");
+            LiveStockItem cowItem = new LiveStockItem(_content.Load<Texture2D>("cow"), new Vector2(-100, -100), 750, 0, "cow");
+            LiveStockItem chickenItem = new LiveStockItem(_content.Load<Texture2D>("chicken"), new Vector2(-100, -100), 300, 0, "chicken");
+            TileItem tileItem = new TileItem(_content.Load<Texture2D>("Sprites/land"), new Vector2(), 10000, 0, "farmslot");
 
-            Task.WaitAll(allTasks); ////blocks the current thread until all other tasks have completed execution
+            //Do CPU work on background Thread
+            await Task.Run(() =>
+            {
+                this.invList.Add(wheatSeed);
+                this.invList.Add(lettuceSeed);
+                this.invList.Add(cornSeed);
+                this.invList.Add(cowItem);
+                this.invList.Add(chickenItem);
+                this.invList.Add(tileItem);
+            });
+
         }
 
         private void closeButton_Click(object sender, EventArgs e)
