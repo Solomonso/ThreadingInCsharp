@@ -75,6 +75,8 @@ namespace ThreadingInCsharp.States
             spriteBatch.End();
         }
 
+
+        //sound when clicking button
         private void QuitgameButton_Click(object sender, EventArgs e)
         {
             this.buttonSound.Play();

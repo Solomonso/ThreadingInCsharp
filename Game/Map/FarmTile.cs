@@ -70,6 +70,7 @@ namespace ThreadingInCsharp.Game.Map
 
             spriteBatch.Draw(Texture, Rectangle, colour);
 
+            //check if there is seed planted in the tile, if there is show remaining grow time
             if (plantedSeed != null)
             {
                 plantedSeed.Draw(gameTime, spriteBatch);
@@ -78,6 +79,8 @@ namespace ThreadingInCsharp.Game.Map
             }
 
         }
+
+        // when mouse hover over tile
         void Hover()
         {
             _previousMouse = _currentMouse;
@@ -109,6 +112,7 @@ namespace ThreadingInCsharp.Game.Map
 
         }
 
+        //planting seed in selected tile
         public void addSeed(SeedItem seed)
         {
             if (seed.GetCount() > 0 && plantedSeed == null)
@@ -133,11 +137,13 @@ namespace ThreadingInCsharp.Game.Map
             }
         }
 
+        //remove seed from selected tile
         public void removeCrop()
         {
             this.plantedSeed = null;
         }
 
+        //havest crop from selected tile
         public void harvestCrop()
         {
             if (plantedSeed.CurrentFrame == plantedSeed.FrameCount - 1)
