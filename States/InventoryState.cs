@@ -37,7 +37,7 @@ namespace ThreadingInCsharp.States
         {
             Inventory = new List<IInventoryItem>();
             seeds = new List<SeedItem>();
-            this.Coins = 1000;
+            this.Coins = 9000;
             font = _content.Load<SpriteFont>("defaultFont");
             this.lettuceSprite = game.Content.Load<Texture2D>("Sprites/Lettuce-icon");
             this.lettuceSeedSprite = game.Content.Load<Texture2D>("seeds_lettuce");

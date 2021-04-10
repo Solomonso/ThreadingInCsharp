@@ -76,7 +76,10 @@ namespace ThreadingInCsharp.Game
             };
             selectButton.Click += SelectButton_Click;
         }
-
+        /// <summary>
+        /// When a seed is selected from the inventory 
+        /// it set its seed status to true or false
+        /// </summary>
         private void SelectButton_Click(object sender, EventArgs e)
         {
             if (!this.seeditem.IsSelected())

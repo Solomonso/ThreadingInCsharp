@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using ThreadingInCsharp.Game;
 using ThreadingInCsharp.Game.Controls;
 using ThreadingInCsharp.Game.Crops;
@@ -27,7 +26,7 @@ namespace ThreadingInCsharp.States
         Texture2D littleChicken;
         Texture2D cowGrow;
         Texture2D deadChicken;
-        Texture2D farm2;
+        Texture2D liveStockFencetile;
         Texture2D farmTileTexture;
 
         SpriteFont buttonFont;
@@ -88,15 +87,16 @@ namespace ThreadingInCsharp.States
             {
                 rainSound.Stop();
             }
+            //creates a fencetile barn where the animals will be displayed in
+            var fencetile = new FarmTile(liveStockFencetile, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 2 / 3, 210), 1, content, this);//fencetile
 
-            var farmTile01 = new FarmTile(farm2, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 2 / 3, 210), 1, content, this);//fencetile
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 9; i++)//creates 9 farmtile where the seeds are plant
             {
                 farmTiles.Add(new FarmTile(farmTileTexture, new Vector2(-100, -100), 1, content, this));
                 Tiles.Add(new FarmTile(farmTileTexture, new Vector2(-100, -100), 1, content, this));
             }
 
-
+            //calculate the totalFarm tile and the one been clicked on
             for (int i = 0; i < (int)Math.Ceiling(((float)farmTiles.Count / 3)); i++)
             {
                 for (int j = 0; j < 3; j++)
@@ -108,14 +108,6 @@ namespace ThreadingInCsharp.States
                     }
                 }
             }
-
-
-            for (int i = 0; i < 9; i++)
-            {
-                chickenSprites.Add(littleChicken);
-                cowSprites.Add(littleCow);
-            }
-
 
             var menuButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 1 / 6, 950), 1)
             {
@@ -138,9 +130,9 @@ namespace ThreadingInCsharp.States
 
             shopButton.Click += shopButton_Click;
 
-            components = new List<Entity>()
+            components = new List<Entity>()//adding the farmtile and buttons to components
             {
-                farmTile01,//fenceTile
+                fencetile,//fenceTile
                 farmTiles[0],
                 farmTiles[1],
                 farmTiles[2],
@@ -165,6 +157,9 @@ namespace ThreadingInCsharp.States
             };
         }
 
+        /// <summary>
+        /// To buy an extra farm time land
+        /// </summary>
         public void BuyLand()
         {
             for (int i = 0; i < (int)Math.Ceiling(((float)farmTiles.Count / 3)); i++)
@@ -186,6 +181,9 @@ namespace ThreadingInCsharp.States
                 ((FarmTile)sender).addSeed(selectedSeed);
         }
 
+        /// <summary>
+        /// Load all game assests from the content pipeline
+        /// </summary>
         private void LoadGameStateAssets()
         {
             this.font = _content.Load<SpriteFont>("defaultFont");
@@ -194,7 +192,7 @@ namespace ThreadingInCsharp.States
             this.buttonTexture = _content.Load<Texture2D>("Button");
             buttonFont = _content.Load<SpriteFont>("defaultFont");
 
-            farm2 = _content.Load<Texture2D>("Sprites/dirt2");
+            liveStockFencetile = _content.Load<Texture2D>("Sprites/dirt2");
             slotTexture = _content.Load<Texture2D>("ItemSlot");
 
             //animal sprites
@@ -207,23 +205,30 @@ namespace ThreadingInCsharp.States
             this.buttonSfx = _content.Load<SoundEffect>("Sound/selectionClick");
         }
 
+        /// <summary>
+        /// Drawing all the spirites needed when game state loads
+        /// </summary>
+        /// <param name="gameTime">GameTime of the game</param>
+        /// <param name="spriteBatch">Sprites that are been drawn</param>
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             Texture2D grass = _content.Load<Texture2D>("Grass");
 
             spriteBatch.Begin();
 
+            //normal time(dayTime)
             spriteBatch.Draw(grass, new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
+           
             DateTime dateTime = DateTime.Now;
             string time = dateTime.ToString("h:mm tt");
 
-            if (DayAndNight() == true)
+            if (Night() == true)
             {
                 //nightTime
+                //this gets drawn
                 spriteBatch.Draw(grass, new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), new Color(50, 50, 125));
                 spriteBatch.DrawString(font, "Time: " + time, new Vector2(640, 15), Color.White);
             }
-
 
             if (this.selectedSeed != null)
                 spriteBatch.Draw(selectedSeed.GetTexture(), new Vector2(200, 20), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
@@ -257,7 +262,12 @@ namespace ThreadingInCsharp.States
             spriteBatch.End();
         }
 
-        public bool DayAndNight()
+        /// <summary>
+        /// This function use the actual time of the day
+        ///  When its 7PM the Game state gets dark
+        /// Return true or false
+        /// </summary>
+        public bool Night()
         {
             DateTime dateTime = DateTime.Now;
             TimeSpan endDayTime = new TimeSpan(19, 0, 0);
@@ -270,6 +280,10 @@ namespace ThreadingInCsharp.States
             return !(startDayTime < now && now < endDayTime);
         }
 
+        /// <summary>
+        /// if a seed as been selected from the inventory slot
+        ///     it prepare all seeds for planting
+        /// </summary>
         void PrepareSeed()
         {
             foreach (SeedItem seeds in inventory.seeds)
@@ -289,7 +303,9 @@ namespace ThreadingInCsharp.States
             }
         }
 
-        //add animals to game when you buy them
+        /// <summary>
+        /// add animals to game when you buy them
+        /// </summary>
         public void AddAnimal(LiveStockItem animal)
         {
 
@@ -306,7 +322,6 @@ namespace ThreadingInCsharp.States
                 Thread.Sleep(TimeSpan.FromSeconds(30));
             }
 
-            //join  all threads in the main thread
             if (animal.GetName() == "cow")
             {
                 float xPosition = random.Next(1300, 1450);
@@ -314,14 +329,16 @@ namespace ThreadingInCsharp.States
                 Cow cow = new Cow(chickenGrow, new Vector2(xPosition, yPosition));
                 components.Add(cow);
                 cow.Click += Livestock_Click;
-                //i++;
+                i++;
                 cowCount++;
                 Thread.Sleep(TimeSpan.FromSeconds(30));
             }
         }
 
-        //event clicker for crops
-        //important for adding crops to farmtile
+        /// <summary>
+        /// For adding crops to farmtile
+        ///  event clicker for crops
+        /// </summary>
         private void farmTile_Click(object sender, EventArgs e)
         {
             if (selectedSeed != null && ((FarmTile)sender).plantedSeed == null)
@@ -357,6 +374,10 @@ namespace ThreadingInCsharp.States
             return false;
         }
 
+        /// <summary>
+        /// Update the game state at runtime
+        /// </summary>
+        /// <param name="gameTime">GameTime of the game</param>
         public override void Update(GameTime gameTime)
         {
             updateWeather(gameTime);
@@ -384,6 +405,7 @@ namespace ThreadingInCsharp.States
             PrepareSeed();
 
         }
+
         //for changing the game to shop state
         private void shopButton_Click(object sender, EventArgs e)
         {
