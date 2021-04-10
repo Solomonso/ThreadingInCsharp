@@ -18,6 +18,7 @@ namespace ThreadingInCsharp.States
 {
     public class GameState : State
     {
+        //declaring all textures and assests needed
         Texture2D rainTexture;
         Texture2D buttonTexture;
         Texture2D slotTexture;
@@ -41,12 +42,8 @@ namespace ThreadingInCsharp.States
         List<Texture2D> chickenSprites;
         List<Texture2D> cowSprites;
 
-        MouseState mouseState;
-
         SoundEffect rainSfx, buttonSfx;
         SoundEffectInstance rainSound, buttonSound;
-
-        Random random = new Random();
 
         public int currTemp;
         public int currHum;
@@ -54,8 +51,6 @@ namespace ThreadingInCsharp.States
         public bool currRain;
         public int chickenCount;
         public int cowCount;
-        private Thread[] liveStockThreadList;
-        private SemaphoreSlim liveStockSemaphore;
 
         TimeSpan timeTillNextWeatherUpdate;
         TimeSpan timeTillNextRain;
@@ -66,9 +61,6 @@ namespace ThreadingInCsharp.States
             this.cowCount = 0;
             this.chickenSprites = new List<Texture2D>();
             this.cowSprites = new List<Texture2D>();
-            this.liveStockThreadList = new Thread[5];
-            this.liveStockSemaphore = new SemaphoreSlim(3);
-            this.mouseState = mouseState;
             this.inventory = inventory;
             this.shop = shop;
 
@@ -98,7 +90,6 @@ namespace ThreadingInCsharp.States
             }
 
             var farmTile01 = new FarmTile(farm2, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 2 / 3, 210), 1, content, this);//fencetile
-
             for (int i = 0; i < 9; i++)
             {
                 farmTiles.Add(new FarmTile(farmTileTexture, new Vector2(-100, -100), 1, content, this));
@@ -306,8 +297,8 @@ namespace ThreadingInCsharp.States
             int i = 1;
             if (animal.GetName() == "chicken")
             {
-                float xPosition = random.Next(390, 540);
-                float yPosition = random.Next(150, 350);
+                float xPosition = random.Next(1300, 1450);
+                float yPosition = random.Next(350, 550);
                 Chicken chick = new Chicken(cowGrow, new Vector2(xPosition, yPosition));
                 components.Add(chick);
                 chick.Click += Livestock_Click;
@@ -318,8 +309,8 @@ namespace ThreadingInCsharp.States
             //join  all threads in the main thread
             if (animal.GetName() == "cow")
             {
-                float xPosition = random.Next(390, 540);
-                float yPosition = random.Next(150, 350);
+                float xPosition = random.Next(1300, 1450);
+                float yPosition = random.Next(350, 550);
                 Cow cow = new Cow(chickenGrow, new Vector2(xPosition, yPosition));
                 components.Add(cow);
                 cow.Click += Livestock_Click;
@@ -392,98 +383,20 @@ namespace ThreadingInCsharp.States
             MouseMethod();
             PrepareSeed();
 
-            ////animal's movement
-            //for (int i = 0; i < components.Count; i++)
-            //{
-            //    if (components[i].Texture == walkingChicken || components[i].Texture == walkingCow)
-            //    {
-            //        int minChangTime = 10;
-            //        int maxChangeTime = 500;
-            //        int directionTimer;
-
-            //        directionTimer = random.Next(minChangTime, maxChangeTime);
-            //        int nextIndex = random.Next(0, 5);
-            //        int nextSpeed = random.Next(0, 6);
-
-            //        directionTimer -= gameTime.ElapsedGameTime.Milliseconds;
-            //        int maxX = 540;
-            //        int minX = 262;
-
-            //        int maxY = 265;
-            //        int minY = 65;
-
-            //        Vector2 Pos = components[i].Position;
-
-            //        if (directionTimer <= 0)
-            //        {
-            //            switch (nextIndex)
-            //            {
-            //                case 1:
-            //                    Pos.X += nextSpeed;
-            //                    break;
-            //                case 2:
-            //                    Pos.X -= nextSpeed;
-            //                    break;
-            //                case 3:
-            //                    Pos.X += nextSpeed;
-            //                    break;
-            //                case 4:
-            //                    Pos.X -= nextSpeed;
-            //                    break;
-            //            }
-            //            switch (nextIndex)
-            //            {
-            //                case 1:
-            //                    Pos.Y += nextSpeed;
-            //                    break;
-            //                case 2:
-            //                    Pos.Y -= nextSpeed;
-            //                    break;
-            //                case 3:
-            //                    Pos.Y -= nextSpeed;
-            //                    break;
-            //                case 4:
-            //                    Pos.Y += nextSpeed;
-            //                    break;
-            //            }
-            //            components[i].Position = Pos;
-            //        }
-
-            //        // Check for bounds
-            //        if (Pos.X > maxX)
-            //        {
-            //            Pos.X = -2;
-            //        }
-            //        else if (Pos.X < minX)
-            //        {
-            //            Pos.X = +2;
-            //        }
-
-            //        if (Pos.Y > maxY)
-            //        {
-            //            Pos.Y = -2;
-            //        }
-            //        else if (Pos.Y < minY)
-            //        {
-            //            Pos.Y = +2;
-            //        }
-            //    }
-            //}
-            //StartThread(gameTime);
         }
-
+        //for changing the game to shop state
         private void shopButton_Click(object sender, EventArgs e)
         {
             this.buttonSound.Play();
             _global.ChangeState(_global.shop);
         }
-
+        //for changing the game to inventory state
         private void inventoryButton_Click(object sender, EventArgs e)
         {
             this.buttonSound.Play();
             _global.ChangeState(_global.inventory);
         }
-
+        //for changing the game to menu state
         private void menuButton_Click(object sender, EventArgs e)
         {
             this.buttonSound.Play();
