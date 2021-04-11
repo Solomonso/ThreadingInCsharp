@@ -10,8 +10,13 @@ using ThreadingInCsharp.Game.interfaces;
 
 namespace ThreadingInCsharp.Game
 {
+    /// <summary>
+    /// The InventorySlot class keep track of items in inventory an inherit from the Entity class
+    /// And also responsible for displaying all the items in the inventory
+    /// </summary>
     public class InventorySlot : Entity
     {
+        //declaring all the variables needed
         IInventoryItem item;
         SeedItem seeditem;
         Texture2D slotTexture;
@@ -24,6 +29,14 @@ namespace ThreadingInCsharp.Game
         SoundEffect buttonSfx;
         SoundEffectInstance buttonSound;
 
+        /// <summary>
+        /// This constructor is use for generating all the items that are harvested which will be for sale in the inventory
+        /// </summary>
+        /// <param name="content">The content</param>
+        /// <param name="position">The x and y position</param>
+        /// <param name="item"> the itesm to add</param>
+        /// <param name="scale">the scale of it</param>
+        /// <param name="inventory">The Inventory</param>
         public InventorySlot(ContentManager content, Vector2 position, IInventoryItem item, float scale, InventoryState inventory) : base(item.GetTexture(), position, 1)
         {
             this.Position = position;
@@ -46,17 +59,14 @@ namespace ThreadingInCsharp.Game
             };
             sellButton.Click += SellButton_Click;
         }
-
-        private void SellButton_Click(object sender, EventArgs e)
-        {
-            this.buttonSound.Play();
-            if (this.item.GetCount() > 0)
-            {
-                this.item.Sell();
-                this.inventory.Coins += this.item.GetSellingPrice();
-            }
-        }
-
+        
+        /// <summary>
+        /// This constructor is use for generating seeds that will be selected for planting (Lettuce, corn, wheat)
+        /// </summary>
+        /// <param name="content">The content</param>
+        /// <param name="position"> The position</param>
+        /// <param name="seeditem">the seeds to add</param>
+        /// <param name="scale">the scale of it</param>
         public InventorySlot(ContentManager content, Vector2 position, SeedItem seeditem, float scale) : base(seeditem.GetTexture(), position, 1)
         {
             this.Position = position;
@@ -76,8 +86,22 @@ namespace ThreadingInCsharp.Game
             };
             selectButton.Click += SelectButton_Click;
         }
+
+        //Sell button in inventory
+        private void SellButton_Click(object sender, EventArgs e)
+        {
+            this.buttonSound.Play();
+            if (this.item.GetCount() > 0)
+            {
+                this.item.Sell();
+                this.inventory.Coins += this.item.GetSellingPrice();
+            }
+        }
+
+    
         /// <summary>
-        /// When a seed is selected from the inventory 
+        ///This method is used to set status of seed
+        ///When a seed is selected from the inventory 
         /// it set its seed status to true or false
         /// </summary>
         private void SelectButton_Click(object sender, EventArgs e)
@@ -94,8 +118,14 @@ namespace ThreadingInCsharp.Game
 
         }
 
+        /// <summary>
+        /// Drawing all the inventory spirites needed
+        /// </summary>
+        /// <param name="gameTime">GameTime of the gam</param>
+        /// <param name="spriteBatch">Sprites that are been drawn</param>
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+
             if (this.isSeed)
             {
                 spriteBatch.Draw(slotTexture, Position + new Vector2(550, 350), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
@@ -114,6 +144,10 @@ namespace ThreadingInCsharp.Game
             }
         }
 
+        /// <summary>
+        /// Update and detect any changes at runtime
+        /// </summary>
+        /// <param name="gameTime">The gametime</param>
         public override void Update(GameTime gameTime)
         {
             if (seeditem != null && seeditem.IsSelected())

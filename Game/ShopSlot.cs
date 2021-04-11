@@ -10,6 +10,10 @@ using ThreadingInCsharp.States;
 
 namespace ThreadingInCsharp.Game
 {
+    /// <summary>
+    /// The ShopSlot class keep track of items in the shop and also responsible for drawing the items 
+    /// Inherits from the Entity
+    /// </summary>
     public class ShopSlot : Entity
     {
         Button buyButton;
@@ -19,6 +23,16 @@ namespace ThreadingInCsharp.Game
         Texture2D slotTexture;
         Texture2D seedTexture;
 
+        /// <summary>
+        /// Use for constructing a shop slot 
+        /// </summary>
+        /// <param name="content">The content</param>
+        /// <param name="position">The position </param>
+        /// <param name="item">The item to add</param>
+        /// <param name="frameCount">Number of frame</param>
+        /// <param name="scale">the scale</param>
+        /// <param name="inv">Accepts an InventoryState</param>
+        /// <param name="shop">Accepts a ShopState</param>
         public ShopSlot(ContentManager content, Vector2 position, IInventoryItem item, int frameCount, float scale, InventoryState inv, ShopState shop) : base(item.GetTexture(), position, 1)
         {
             this.shop = shop;
@@ -40,6 +54,10 @@ namespace ThreadingInCsharp.Game
             buyButton.Click += BuyItem;
         }
 
+        /// <summary>
+        /// This method is to buy items available in the shop which is seeds and livestock 
+        /// And also check which current item is bought from the shop and money gets deducted 
+        /// </summary>
         private void BuyItem(object sender, EventArgs e)
         {
             if (inventory.Coins >= this.item.GetPrice())
@@ -73,14 +91,22 @@ namespace ThreadingInCsharp.Game
             }
         }
 
+        /// <summary>
+        /// Drawing all the assets in the shop
+        /// </summary>
+        /// <param name="gameTime">GameTime of the game</param>
+        /// <param name="spriteBatch">Sprites that are been drawn</param>
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            //add 550, 350 to the items of the shop
-            spriteBatch.Draw(slotTexture, Position + new Vector2(540,340), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(item.GetTexture(), Position + new Vector2(550, 350), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+           spriteBatch.Draw(slotTexture, Position + new Vector2(540,340), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+           spriteBatch.Draw(item.GetTexture(), Position + new Vector2(550, 350), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             buyButton.Draw(gameTime, spriteBatch);
         }
 
+        /// <summary>
+        /// Update and detect any changes at runtime
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             buyButton.Update(gameTime);
