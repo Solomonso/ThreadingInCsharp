@@ -73,15 +73,6 @@ namespace ThreadingInCsharp.Game.Livestocks
             Hover();
         }
 
-        //public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
-        //{
-        //    DrawAnimation(spriteBatch);
-        //    Color colour = Color.White;
-        //    if (_isHovering)
-        //        colour = Color.Gray;
-        //    spriteBatch.Draw(Texture, Position, new Rectangle(CurrentFrame * FrameWidth, 0, FrameWidth, FrameHeight), colour);
-        //}
-
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             DrawAnimation(spriteBatch);

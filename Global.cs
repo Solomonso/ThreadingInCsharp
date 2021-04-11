@@ -66,6 +66,7 @@ namespace ThreadingInCsharp
 
         public void _Resize()
         {
+            //makes the game fullscree and the mouse responsive
             graphics.IsFullScreen = true;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;

@@ -47,7 +47,7 @@ namespace ThreadingInCsharp.States
         public int currTemp;
         public int currHum;
         public int currSun;
-        public bool currRain;
+        public int currRain;
         public int chickenCount;
         public int cowCount;
 
@@ -72,21 +72,22 @@ namespace ThreadingInCsharp.States
             this.currHum = 40;
             this.currSun = 30;
             this.currTemp = 15;
-            this.currRain = true;
+            this.currRain = 10;
             this.timeTillNextWeatherUpdate = new TimeSpan(0, 0, 10);
-            this.timeTillNextRain = new TimeSpan(0, 2, 0);
+            this.timeTillNextRain = new TimeSpan(0, 0, 10);
 
             this.rainSfx = content.Load<SoundEffect>("Sound/rain");
             this.rainSound = rainSfx.CreateInstance();
             this.rainSound.IsLooped = true;
-            if (currRain == true)
+            if (currRain == 100)
             {
-                // rainSound.Play();
+               rainSound.Play();
             }
             else
             {
                 rainSound.Stop();
             }
+
             //creates a fencetile barn where the animals will be displayed in
             var fencetile = new FarmTile(liveStockFencetile, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 2 / 3, 210), 1, content, this);//fencetile
 
@@ -234,8 +235,8 @@ namespace ThreadingInCsharp.States
                 spriteBatch.Draw(selectedSeed.GetTexture(), new Vector2(200, 20), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
 
 
-            if (currRain == true)
-            {
+            if (currRain == 100)
+            {          
                 spriteBatch.Draw(rainTexture, new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White * 0.7f);
             }
 
@@ -247,6 +248,7 @@ namespace ThreadingInCsharp.States
             spriteBatch.DrawString(font, "Temperature:" + currTemp.ToString(), new Vector2(640, 35), Color.White);
             spriteBatch.DrawString(font, "Humidity:" + currHum.ToString(), new Vector2(640, 55), Color.White);
             spriteBatch.DrawString(font, "Sunshine:" + currSun.ToString(), new Vector2(640, 75), Color.White);
+            spriteBatch.DrawString(font, "Chance of Rain:" + currRain.ToString() +"%", new Vector2(640, 95), Color.White);
 
             spriteBatch.Draw(littleChicken, new Vector2(280, 5), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
             spriteBatch.Draw(littleCow, new Vector2(280, 30), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
@@ -377,15 +379,14 @@ namespace ThreadingInCsharp.States
         /// <summary>
         /// Update the game state at runtime
         /// </summary>
-        /// <param name="gameTime">GameTime of the game</param>
         public override void Update(GameTime gameTime)
         {
             updateWeather(gameTime);
             makeItRain(gameTime);
 
-            if (currRain)
+            if (currRain == 100)//plays rain sounf when the % is 100
             {
-                rainSound.Resume();
+                rainSound.Play();
             }
             else
             {
@@ -400,10 +401,8 @@ namespace ThreadingInCsharp.States
                     components.RemoveAt(i);
                 }
             }
-
             MouseMethod();
             PrepareSeed();
-
         }
 
         //for changing the game to shop state
@@ -483,7 +482,7 @@ namespace ThreadingInCsharp.States
             if (this.timeTillNextRain < TimeSpan.Zero)
             {
                 currRain = weather.randomRain();
-                this.timeTillNextRain = new TimeSpan(0, 1, 0);
+                this.timeTillNextRain = new TimeSpan(0, 0, 20);
             }
         }
 
