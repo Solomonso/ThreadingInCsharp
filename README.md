@@ -1,6 +1,6 @@
 # Threading In C#
 
-This Game is a farming simulator. It is built C# in Visual Studio 2019 using UWP the MonoGame Framework. 
+This Game is a farming simulator. It is built with C# in Visual Studio 2019 using UWP and the MonoGame Framework. 
 
 #### Team Members:
 
