@@ -171,7 +171,6 @@
     <Content Include="Content\ItemSlot.png" />
     <Content Include="Content\lettuce.png" />
     <Content Include="Content\lettuceCrop.png" />
-    <Content Include="Content\Map.png" />
     <Content Include="Content\MenuBackground.png" />
     <Content Include="Content\OptionsMenu.png" />
     <Content Include="Content\rain.png" />
@@ -183,7 +182,6 @@
     <Content Include="Content\Sound\seed.png" />
     <Content Include="Content\Sound\selectionClick.wav" />
     <Content Include="Content\Sound\soundtrack.mp3" />
-    <Content Include="Content\Sprites\animals.jpg" />
     <Content Include="Content\Sprites\Beef.png" />
     <Content Include="Content\Sprites\Box.png" />
     <Content Include="Content\Sprites\chicken.png" />
