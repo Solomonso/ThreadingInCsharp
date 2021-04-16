@@ -1,8 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using ThreadingInCsharp.Game.interfaces;
 
 namespace ThreadingInCsharp.Game.Items
@@ -89,4 +86,4 @@ namespace ThreadingInCsharp.Game.Items
             return this.sellingPrice;
         }
     }
-    }
+}

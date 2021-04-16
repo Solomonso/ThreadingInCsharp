@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ThreadingInCsharp
+﻿namespace ThreadingInCsharp
 {
     /// <summary>
     /// The main class.

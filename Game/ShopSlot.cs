@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using ThreadingInCsharp.Game.Controls;
 using ThreadingInCsharp.Game.interfaces;
 using ThreadingInCsharp.States;
@@ -98,8 +96,8 @@ namespace ThreadingInCsharp.Game
         /// <param name="spriteBatch">Sprites that are been drawn</param>
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-           spriteBatch.Draw(slotTexture, Position + new Vector2(540,340), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
-           spriteBatch.Draw(item.GetTexture(), Position + new Vector2(550, 350), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(slotTexture, Position + new Vector2(540, 340), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(item.GetTexture(), Position + new Vector2(550, 350), null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             buyButton.Draw(gameTime, spriteBatch);
         }
 

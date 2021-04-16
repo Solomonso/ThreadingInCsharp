@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using ThreadingInCsharp.Game.Controls;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Framework.Audio;
+using System;
+using System.Collections.Generic;
 using ThreadingInCsharp.Game;
+using ThreadingInCsharp.Game.Controls;
 
 namespace ThreadingInCsharp.States
 {
@@ -25,21 +25,21 @@ namespace ThreadingInCsharp.States
             background = _content.Load<Texture2D>("MenuBackground");
             this.buttonSfx = content.Load<SoundEffect>("Sound/selectionClick");
             this.buttonSound = buttonSfx.CreateInstance();
-            var newGameButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width/2, 450f), 1)
+            var newGameButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2, 450f), 1)
             {
                 Text = "Back to Menu",
             };
 
             newGameButton.Click += BackToMenuButton_Click;
 
-            var soundOnButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width/2, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height/3), 1)
+            var soundOnButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 3), 1)
             {
                 Text = "Sound On",
             };
 
             soundOnButton.Click += soundOn_Click;
 
-            var soundOffButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width/2, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height/4), 1)
+            var soundOffButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / 2, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / 4), 1)
             {
                 Text = "Sound Off",
             };

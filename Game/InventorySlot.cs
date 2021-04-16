@@ -1,12 +1,12 @@
-﻿using Microsoft.Xna.Framework.Audio;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using Microsoft.Xna.Framework;
 using ThreadingInCsharp.Game.Controls;
+using ThreadingInCsharp.Game.interfaces;
 using ThreadingInCsharp.Game.Items;
 using ThreadingInCsharp.States;
-using ThreadingInCsharp.Game.interfaces;
 
 namespace ThreadingInCsharp.Game
 {
@@ -59,7 +59,7 @@ namespace ThreadingInCsharp.Game
             };
             sellButton.Click += SellButton_Click;
         }
-        
+
         /// <summary>
         /// This constructor is use for generating seeds that will be selected for planting (Lettuce, corn, wheat)
         /// </summary>
@@ -98,7 +98,7 @@ namespace ThreadingInCsharp.Game
             }
         }
 
-    
+
         /// <summary>
         ///This method is used to set status of seed
         ///When a seed is selected from the inventory 

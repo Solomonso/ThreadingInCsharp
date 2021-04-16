@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using ThreadingInCsharp.Game;
 using ThreadingInCsharp.Game.Controls;
@@ -30,7 +29,6 @@ namespace ThreadingInCsharp.States
         Texture2D chickenSprite;
         SpriteFont font;
         Button closeButton;
-
 
         public InventoryState(Global game, GraphicsDevice graphicsDevice, ContentManager contentManager)
             : base(game, graphicsDevice, contentManager)

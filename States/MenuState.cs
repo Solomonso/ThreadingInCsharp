@@ -2,11 +2,9 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using ThreadingInCsharp.Game;
 using ThreadingInCsharp.Game.Controls;
 
@@ -49,7 +47,7 @@ namespace ThreadingInCsharp.States
 
             settingsButton.Click += SettingsButton_Click;
 
-            var quitGameButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 4/5, 950), 1)
+            var quitGameButton = new Button(buttonTexture, buttonFont, new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 4 / 5, 950), 1)
             {
                 Text = "Quit Game",
             };
@@ -62,7 +60,7 @@ namespace ThreadingInCsharp.States
                 settingsButton,
                 quitGameButton
             };
-            
+
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -97,7 +95,7 @@ namespace ThreadingInCsharp.States
 
         public override void PostUpdate(GameTime gameTime)
         {
-           // throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
     }
 }

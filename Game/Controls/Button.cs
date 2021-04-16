@@ -18,7 +18,7 @@ namespace ThreadingInCsharp.Game.Controls
         public Button(Texture2D texture, SpriteFont font, Vector2 position, int frameCount) : base(texture, position, frameCount)
         {
             _font = font;
-            
+
             PenColour = Color.Black;
         }
 
@@ -40,7 +40,7 @@ namespace ThreadingInCsharp.Game.Controls
         public Vector2 Size { get; internal set; }
         public Color BackgroundColor { get; internal set; }
         public Vector2 Location { get; internal set; }
-        
+
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             var colour = Color.White;
@@ -56,7 +56,7 @@ namespace ThreadingInCsharp.Game.Controls
                 var y = (Rectangle.Y + (Rectangle.Height / 2)) - (_font.MeasureString(Text).Y / 2);
 
                 spriteBatch.DrawString(_font, Text, new Vector2(x, y), PenColour);
-            }         
+            }
         }
 
         public override void Update(GameTime gameTime)

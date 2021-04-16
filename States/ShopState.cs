@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ThreadingInCsharp.Game;
@@ -70,7 +69,6 @@ namespace ThreadingInCsharp.States
 
         public async Task CreateInvList()
         {
-
             SeedItem wheatSeed = new SeedItem(_content.Load<Texture2D>("seeds_wheat"), new Vector2(-100, -100), 100, 0, "wheat");
             SeedItem lettuceSeed = new SeedItem(_content.Load<Texture2D>("seeds_lettuce"), new Vector2(-100, -100), 50, 0, "lettuce");
             SeedItem cornSeed = new SeedItem(_content.Load<Texture2D>("seeds_corn"), new Vector2(-100, -100), 5, 0, "corn");
@@ -88,7 +86,6 @@ namespace ThreadingInCsharp.States
                 this.invList.Add(chickenItem);
                 this.invList.Add(tileItem);
             });
-
         }
 
         private void closeButton_Click(object sender, EventArgs e)

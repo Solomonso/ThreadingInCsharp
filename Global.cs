@@ -61,7 +61,7 @@ namespace ThreadingInCsharp
             }
             currentState.Update(gameTime);
             currentState.PostUpdate(gameTime);
-           base.Update(gameTime);
+            base.Update(gameTime);
         }
 
         public void _Resize()
