@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using ThreadingInCsharp.Game;
 using ThreadingInCsharp.Game.Controls;
 using ThreadingInCsharp.Game.Crops;
@@ -81,7 +82,7 @@ namespace ThreadingInCsharp.States
             this.rainSound.IsLooped = true;
             if (currRain == 100)
             {
-               rainSound.Play();
+                rainSound.Play();
             }
             else
             {
@@ -219,7 +220,7 @@ namespace ThreadingInCsharp.States
 
             //normal time(dayTime)
             spriteBatch.Draw(grass, new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
-           
+
             DateTime dateTime = DateTime.Now;
             string time = dateTime.ToString("h:mm tt");
 
@@ -236,7 +237,7 @@ namespace ThreadingInCsharp.States
 
 
             if (currRain == 100)
-            {          
+            {
                 spriteBatch.Draw(rainTexture, new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White * 0.7f);
             }
 
@@ -248,7 +249,7 @@ namespace ThreadingInCsharp.States
             spriteBatch.DrawString(font, "Temperature:" + currTemp.ToString(), new Vector2(640, 35), Color.White);
             spriteBatch.DrawString(font, "Humidity:" + currHum.ToString(), new Vector2(640, 55), Color.White);
             spriteBatch.DrawString(font, "Sunshine:" + currSun.ToString(), new Vector2(640, 75), Color.White);
-            spriteBatch.DrawString(font, "Chance of Rain:" + currRain.ToString() +"%", new Vector2(640, 95), Color.White);
+            spriteBatch.DrawString(font, "Chance of Rain:" + currRain.ToString() + "%", new Vector2(640, 95), Color.White);
 
             spriteBatch.Draw(littleChicken, new Vector2(280, 5), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
             spriteBatch.Draw(littleCow, new Vector2(280, 30), null, Color.White, 0f, Vector2.Zero, .5f, SpriteEffects.None, 0f);
@@ -381,8 +382,10 @@ namespace ThreadingInCsharp.States
         /// </summary>
         public override void Update(GameTime gameTime)
         {
-            updateWeather(gameTime);
-            makeItRain(gameTime);
+
+            //Using TPL randomize weather conditions
+            Task.Factory.StartNew(() => updateWeather(gameTime));
+            Task.Factory.StartNew(() => makeItRain(gameTime));
 
             if (currRain == 100)//plays rain sounf when the % is 100
             {
@@ -469,9 +472,12 @@ namespace ThreadingInCsharp.States
             if (this.timeTillNextWeatherUpdate < TimeSpan.Zero)
             {
                 currTemp = weather.randomTemp();
+                Thread.Sleep(3000); //Suspend the currTemp(current thread) for 3 seconds
                 currHum = weather.randomHumidity();
+                Thread.Sleep(3000); //Suspend the currHum(current thread) for 3 seconds
                 currSun = weather.randomSun();
                 this.timeTillNextWeatherUpdate = new TimeSpan(0, 0, 10);
+
             }
         }
 
